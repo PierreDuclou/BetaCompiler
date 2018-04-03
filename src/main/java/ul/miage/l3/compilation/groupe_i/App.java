@@ -14,7 +14,7 @@ public class App
 {
     public static void main( String[] args ) {
         try {
-            ParserCup pc = new ParserCup(new Yylex(new FileReader("src/main/resources/ex")));
+            ParserCup pc = new ParserCup(new Yylex(new FileReader("src/main/resources/example")));
             pc.parse();
             System.out.println("File parsed successfully.");
         } catch (FileNotFoundException e) {
