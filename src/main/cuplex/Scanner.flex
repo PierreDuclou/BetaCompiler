@@ -1,0 +1,82 @@
+/**
+ * Analyseur lexical
+ *
+ * Auteurs : 
+ *      Jérémy Thomas,
+ *      Ouafa Bourekhsas,
+ *      Salme Ould Ahmed,
+ *      Pierre Duclou
+ *
+ * Version SNAPSHOT-1.0
+ */
+
+//--- Header ------------------------------------------------------------------
+
+package generated.cuplex;
+
+import java_cup.runtime.Symbol;
+
+%%
+
+//--- Options -----------------------------------------------------------------
+
+%public
+%cupsym Sym
+%cup
+
+//--- Macros ------------------------------------------------------------------
+
+Comment = {InlineComment} | {MultilineComment}
+InlineComment = "//" [^\r\n]* (\r|\n|\r\n)?
+MultilineComment = "/*" [^*] ~"*/" | "/*" "*"+ "/"
+Identifier = [a-zA-Z1-9_]+
+Whitespaces = [\s\t\r\n]+
+Value = [0-9]+
+
+%%
+
+//--- Lexems ------------------------------------------------------------------
+
+// Verbose tokens
+"int"         { return new Symbol(Sym.INT); }
+"void"        { return new Symbol(Sym.VOID); }
+"return"      { return new Symbol(Sym.RETURN); }
+"if"          { return new Symbol(Sym.IF); }
+"else"        { return new Symbol(Sym.ELSE); }
+"while"       { return new Symbol(Sym.WHILE); }
+
+// Delimiters
+";"           { return new Symbol(Sym.SEMICOLON); }
+","           { return new Symbol(Sym.COMMA); }
+"->"          { return new Symbol(Sym.ARROW); }
+
+// Operators
+"+"           { return new Symbol(Sym.ADD); }
+"++"          { return new Symbol(Sym.INC); }
+"-"           { return new Symbol(Sym.SUB); }
+"--"          { return new Symbol(Sym.DEC); }
+"/"           { return new Symbol(Sym.DIV); }
+"*"           { return new Symbol(Sym.MUL); }
+"%"           { return new Symbol(Sym.MOD); }
+"="           { return new Symbol(Sym.ASSIGN); }
+"<"           { return new Symbol(Sym.LT); }
+">"           { return new Symbol(Sym.GT); }
+">="          { return new Symbol(Sym.GE); }
+"<="          { return new Symbol(Sym.LE); }
+"=="          { return new Symbol(Sym.EQ); }
+"&&"          { return new Symbol(Sym.AND); }
+"||"          { return new Symbol(Sym.OR); }
+
+// Wrappers
+"("           { return new Symbol(Sym.OPEN_P); }
+")"           { return new Symbol(Sym.CLOSE_P); }
+"{"           { return new Symbol(Sym.OPEN_B); }
+"}"           { return new Symbol(Sym.CLOSE_B); }
+
+// Custom tokens
+{Identifier}    { return new Symbol(Sym.ID, yytext()); }
+{Value}       { return new Symbol(Sym.VALUE, yytext()); }
+
+// Ignored tokens
+{Comment}     {}
+{Whitespaces} {}

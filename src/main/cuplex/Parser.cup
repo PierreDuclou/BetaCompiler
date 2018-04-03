@@ -1,0 +1,123 @@
+/**
+ * Analyseur lexical
+ *
+ * Auteurs : 
+ *      Jérémy Thomas,
+ *      Ouafa Bourekhsas,
+ *      Salme Ould Ahmed,
+ *      Pierre Duclou
+ *
+ * Version SNAPSHOT-1.0
+ */
+
+//--- Header ------------------------------------------------------------
+
+package generated.cuplex;
+
+//--- Declarations ------------------------------------------------------------
+
+// Verbose tokens
+terminal INT, VOID, RETURN, IF, ELSE, WHILE;
+
+// Delimiters
+terminal SEMICOLON, COMMA, ARROW;
+
+// Operators
+terminal ADD, INC, SUB, DEC, DIV, MUL, MOD, ASSIGN, LT, GT, GE, LE, EQ, AND, OR;
+
+// Wrappers
+terminal OPEN_P, CLOSE_P, OPEN_B, CLOSE_B;
+
+// Custom tokens
+terminal ID, VALUE;
+
+// Non terminal expressions
+non terminal program;
+non terminal arith_exp;
+non terminal exp_list;
+non terminal exp_part;
+non terminal assignation;
+non terminal assignable;
+non terminal variable_declaration;
+non terminal parameters;
+non terminal arguments;
+non terminal function;
+non terminal function_signature;
+non terminal function_type;
+non terminal function_call;
+non terminal block;
+non terminal instructions;
+non terminal instructions_part;
+non terminal instruction;
+non terminal control_flow;
+non terminal if_statement;
+non terminal condition;
+non terminal while_loop;
+non terminal while_profil;
+
+//--- Definitions -------------------------------------------------------------
+
+// Precedences
+precedence left ADD, SUB;
+precedence left MUL, DIV, MOD;
+
+// Parser start
+start with program;
+program ::= program function | program variable_declaration | program assignation |;
+
+// Function declaration
+function           ::= function_signature block;
+function_signature ::= ID OPEN_P parameters CLOSE_P ARROW function_type;
+parameters         ::= INT ID | parameters COMMA INT ID;
+function_type      ::= INT | VOID;
+
+// IF statement
+if_statement ::= IF OPEN_P condition CLOSE_P block
+               | IF OPEN_P condition CLOSE_P block ELSE block;
+
+condition ::= condition LT
+            | condition GT
+            | condition GE
+            | condition LE
+            | condition EQ
+            | condition AND
+            | condition OR
+            | exp_list
+            | OPEN_P condition CLOSE_P;
+
+// WHILE loop
+while_loop   ::= WHILE OPEN_P while_profil CLOSE_P block;
+while_profil ::= assignation SEMICOLON condition SEMICOLON ID INC
+               | assignation SEMICOLON condition SEMICOLON ID DEC;
+
+
+// Instructions
+block             ::= OPEN_B instructions CLOSE_B;
+instructions      ::= instructions instructions_part | instructions_part;
+instructions_part ::= instruction SEMICOLON;
+instruction       ::= assignation
+                    | function_call
+                    | RETURN ID | RETURN VALUE
+                    | exp_list
+                    | control_flow;
+
+control_flow ::= if_statement | while_loop;
+assignation  ::= variable_declaration ASSIGN assignable SEMICOLON
+               | ID ASSIGN assignable SEMICOLON;
+
+assignable           ::= arith_exp | function_call | VALUE | ID;
+variable_declaration ::= INT ID | INT ID SEMICOLON;
+function_call        ::= ID OPEN_P arguments CLOSE_P
+                       | ID OPEN_P CLOSE_P;
+arguments            ::= VALUE | arguments COMMA VALUE;
+
+// Arithmetic expression
+exp_list  ::= exp_list exp_part | exp_part;
+exp_part  ::= arith_exp SEMICOLON;
+arith_exp ::= arith_exp ADD
+            | arith_exp SUB
+            | arith_exp MUL
+            | arith_exp DIV
+            | arith_exp MOD
+            | ID INC | ID DEC | VALUE INC | VALUE DEC
+            | OPEN_P arith_exp CLOSE_P;
