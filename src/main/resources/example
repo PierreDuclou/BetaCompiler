@@ -1,8 +1,13 @@
 int b;
 
 main() -> void {
-    // b = 10; // not working
-    if (b >= 10) {
-        int a = 1;
+    b = 11 + (12 * 5);
+
+    if (b > 0) {
+        b = 0;
+    }
+
+    while (b < 10) {
+        b = b + 1;
     }
 }

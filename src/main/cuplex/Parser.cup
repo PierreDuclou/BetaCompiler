@@ -78,6 +78,7 @@ block       ::= OPEN_B block inner_block CLOSE_B {: System.out.println("14"); :}
               | OPEN_B CLOSE_B  {: System.out.println("16"); :};
 inner_block ::= inner_block instruction {: System.out.println("17"); :}
               | instruction {: System.out.println("18"); :}
+              | inner_block control_flow {: System.out.println("19"); :}
               | control_flow {: System.out.println("19"); :};
 
 //--- Control flow ------------------------------------------------------------
@@ -114,12 +115,10 @@ return_statement     ::= RETURN expression {: System.out.println("40"); :};
 expression ::= term ADD expression {: System.out.println("41"); :}
              | term SUB expression {: System.out.println("42"); :}
              | term {: System.out.println("43"); :};
-
 term       ::= factor MUL term {: System.out.println("44"); :}
              | factor DIV term {: System.out.println("45"); :}
              | factor MOD term {: System.out.println("46"); :}
              | factor {: System.out.println("47"); :};
-
 factor     ::= OPEN_P expression CLOSE_P {: System.out.println("48"); :}
              | ID {: System.out.println("49"); :}
              | func_call {: System.out.println("50"); :}

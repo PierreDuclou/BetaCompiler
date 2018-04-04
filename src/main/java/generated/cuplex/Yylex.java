@@ -7,6 +7,7 @@
  *      Jérémy Thomas,
  *      Ouafa Bourekhsas,
  *      Salme Ould Ahmed,
+ *      Théo Cominolo,
  *      Pierre Duclou
  *
  * Version SNAPSHOT-1.0
