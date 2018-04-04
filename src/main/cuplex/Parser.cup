@@ -5,16 +5,14 @@
  *      Jérémy Thomas,
  *      Ouafa Bourekhsas,
  *      Salme Ould Ahmed,
+ *      Théo Cominolo,
  *      Pierre Duclou
  *
  * Version SNAPSHOT-1.0
  */
 
-//--- Header ------------------------------------------------------------
-
+// Header
 package generated.cuplex;
-
-//--- Declarations ------------------------------------------------------------
 
 // Verbose tokens
 terminal INT, VOID, RETURN, IF, ELSE, WHILE;
@@ -23,7 +21,7 @@ terminal INT, VOID, RETURN, IF, ELSE, WHILE;
 terminal SEMICOLON, COMMA, ARROW;
 
 // Operators
-terminal ADD, INC, SUB, DEC, DIV, MUL, MOD, ASSIGN, LT, GT, GE, LE, EQ, AND, OR;
+terminal ADD, SUB, DIV, MUL, MOD, ASSIGN, LT, GT, GE, LE, EQ;
 
 // Wrappers
 terminal OPEN_P, CLOSE_P, OPEN_B, CLOSE_B;
@@ -31,93 +29,98 @@ terminal OPEN_P, CLOSE_P, OPEN_B, CLOSE_B;
 // Custom tokens
 terminal ID, VALUE;
 
-// Non terminal expressions
 non terminal program;
-non terminal arith_exp;
-non terminal exp_list;
-non terminal exp_part;
-non terminal assignation;
-non terminal assignable;
-non terminal variable_declaration;
+non terminal func_definition;
+non terminal func_type;
 non terminal parameters;
+non terminal func_call;
 non terminal arguments;
-non terminal function;
-non terminal function_signature;
-non terminal function_type;
-non terminal function_call;
 non terminal block;
-non terminal instructions;
-non terminal instructions_part;
-non terminal instruction;
+non terminal inner_block;
 non terminal control_flow;
 non terminal if_statement;
 non terminal condition;
+non terminal comparison;
 non terminal while_loop;
-non terminal while_profil;
+non terminal instruction;
+non terminal concrete_instruction;
+non terminal var_declaration;
+non terminal var_assignation;
+non terminal return_statement;
+non terminal expression;
+non terminal term;
+non terminal factor;
 
-//--- Definitions -------------------------------------------------------------
-
-// Precedences
 precedence left ADD, SUB;
 precedence left MUL, DIV, MOD;
 
-// Parser start
 start with program;
-program ::= program function | program variable_declaration | program assignation |;
 
-// Function declaration
-function           ::= function_signature block;
-function_signature ::= ID OPEN_P parameters CLOSE_P ARROW function_type;
-parameters         ::= INT ID | parameters COMMA INT ID;
-function_type      ::= INT | VOID;
+program ::= program var_declaration SEMICOLON {: System.out.println("1"); :}
+          | program func_definition {: System.out.println("2"); :}
+          | var_declaration SEMICOLON {: System.out.println("3"); :}
+          | func_definition {: System.out.println("4"); :};
+
+//--- Function ----------------------------------------------------------------
+func_definition ::= ID OPEN_P parameters CLOSE_P ARROW func_type block  {: System.out.println("5"); :};
+func_type       ::= INT | VOID  {: System.out.println("6"); :};
+parameters      ::= parameters COMMA var_declaration  {: System.out.println("7"); :}
+                  | var_declaration {: System.out.println("8"); :}
+                  |  {: System.out.println("9"); :};
+func_call       ::= ID OPEN_P arguments CLOSE_P  {: System.out.println("10"); :};
+arguments       ::= arguments COMMA expression  {: System.out.println("11"); :}
+                  | expression {: System.out.println("12"); :}
+                  |  {: System.out.println("13"); :};
+
+//--- Block -------------------------------------------------------------------
+block       ::= OPEN_B block inner_block CLOSE_B {: System.out.println("14"); :}
+              | OPEN_B inner_block CLOSE_B {: System.out.println("15"); :}
+              | OPEN_B CLOSE_B  {: System.out.println("16"); :};
+inner_block ::= inner_block instruction {: System.out.println("17"); :}
+              | instruction {: System.out.println("18"); :}
+              | control_flow {: System.out.println("19"); :};
+
+//--- Control flow ------------------------------------------------------------
+control_flow ::= if_statement {: System.out.println("20"); :}
+               | while_loop {: System.out.println("21"); :};
 
 // IF statement
-if_statement ::= IF OPEN_P condition CLOSE_P block
-               | IF OPEN_P condition CLOSE_P block ELSE block;
+if_statement ::= IF condition block {: System.out.println("22"); :}
+               | IF condition block ELSE block {: System.out.println("23"); :};
 
-condition ::= condition LT
-            | condition GT
-            | condition GE
-            | condition LE
-            | condition EQ
-            | condition AND
-            | condition OR
-            | exp_list
-            | OPEN_P condition CLOSE_P;
+condition    ::= OPEN_P comparison CLOSE_P {: System.out.println("24"); :};
+comparison   ::= expression LT expression {: System.out.println("25"); :}
+               | expression LE expression {: System.out.println("26"); :}
+               | expression EQ expression {: System.out.println("27"); :}
+               | expression GE expression {: System.out.println("28"); :}
+               | expression GT expression {: System.out.println("29"); :};
 
-// WHILE loop
-while_loop   ::= WHILE OPEN_P while_profil CLOSE_P block;
-while_profil ::= assignation SEMICOLON condition SEMICOLON ID INC
-               | assignation SEMICOLON condition SEMICOLON ID DEC;
+// While loop
+while_loop ::= WHILE condition block {: System.out.println("30"); :};
 
+//--- Instruction -------------------------------------------------------------
+instruction          ::= concrete_instruction SEMICOLON {: System.out.println("31"); :};
+concrete_instruction ::= var_declaration {: System.out.println("32"); :}
+                       | var_assignation {: System.out.println("33"); :}
+                       | return_statement {: System.out.println("34"); :}
+                       | func_call {: System.out.println("35"); :}
+                       | {: System.out.println("36"); :};
+var_declaration      ::= INT ID {: System.out.println("37"); :};
+var_assignation      ::= var_declaration ASSIGN expression {: System.out.println("38"); :}
+                       | ID ASSIGN expression {: System.out.println("39"); :};
+return_statement     ::= RETURN expression {: System.out.println("40"); :};
 
-// Instructions
-block             ::= OPEN_B instructions CLOSE_B;
-instructions      ::= instructions instructions_part | instructions_part;
-instructions_part ::= instruction SEMICOLON;
-instruction       ::= assignation
-                    | function_call
-                    | RETURN ID | RETURN VALUE
-                    | exp_list
-                    | control_flow;
+// Expression
+expression ::= term ADD expression {: System.out.println("41"); :}
+             | term SUB expression {: System.out.println("42"); :}
+             | term {: System.out.println("43"); :};
 
-control_flow ::= if_statement | while_loop;
-assignation  ::= variable_declaration ASSIGN assignable SEMICOLON
-               | ID ASSIGN assignable SEMICOLON;
+term       ::= factor MUL term {: System.out.println("44"); :}
+             | factor DIV term {: System.out.println("45"); :}
+             | factor MOD term {: System.out.println("46"); :}
+             | factor {: System.out.println("47"); :};
 
-assignable           ::= arith_exp | function_call | VALUE | ID;
-variable_declaration ::= INT ID | INT ID SEMICOLON;
-function_call        ::= ID OPEN_P arguments CLOSE_P
-                       | ID OPEN_P CLOSE_P;
-arguments            ::= VALUE | arguments COMMA VALUE;
-
-// Arithmetic expression
-exp_list  ::= exp_list exp_part | exp_part;
-exp_part  ::= arith_exp SEMICOLON;
-arith_exp ::= arith_exp ADD
-            | arith_exp SUB
-            | arith_exp MUL
-            | arith_exp DIV
-            | arith_exp MOD
-            | ID INC | ID DEC | VALUE INC | VALUE DEC
-            | OPEN_P arith_exp CLOSE_P;
+factor     ::= OPEN_P expression CLOSE_P {: System.out.println("48"); :}
+             | ID {: System.out.println("49"); :}
+             | func_call {: System.out.println("50"); :}
+             | VALUE {: System.out.println("51"); :};

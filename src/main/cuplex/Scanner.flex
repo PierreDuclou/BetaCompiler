@@ -5,6 +5,7 @@
  *      Jérémy Thomas,
  *      Ouafa Bourekhsas,
  *      Salme Ould Ahmed,
+ *      Théo Cominolo,
  *      Pierre Duclou
  *
  * Version SNAPSHOT-1.0
@@ -52,9 +53,7 @@ Value = [0-9]+
 
 // Operators
 "+"           { return new Symbol(Sym.ADD); }
-"++"          { return new Symbol(Sym.INC); }
 "-"           { return new Symbol(Sym.SUB); }
-"--"          { return new Symbol(Sym.DEC); }
 "/"           { return new Symbol(Sym.DIV); }
 "*"           { return new Symbol(Sym.MUL); }
 "%"           { return new Symbol(Sym.MOD); }
@@ -64,8 +63,6 @@ Value = [0-9]+
 ">="          { return new Symbol(Sym.GE); }
 "<="          { return new Symbol(Sym.LE); }
 "=="          { return new Symbol(Sym.EQ); }
-"&&"          { return new Symbol(Sym.AND); }
-"||"          { return new Symbol(Sym.OR); }
 
 // Wrappers
 "("           { return new Symbol(Sym.OPEN_P); }

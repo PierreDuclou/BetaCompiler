@@ -7,8 +7,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 /**
- * Hello world!
+ * Classe principale
  *
+ * Auteurs :
+ *      Jérémy Thomas,
+ *      Ouafa Bourekhsas,
+ *      Salme Ould Ahmed,
+ *      Théo Cominolo,
+ *      Pierre Duclou
+ *
+ * Version SNAPSHOT-1.0
  */
 public class App 
 {

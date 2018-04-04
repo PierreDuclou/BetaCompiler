@@ -1,3 +1,8 @@
 int b;
-b = 0;
-int a = 123456789;
+
+main() -> void {
+    // b = 10; // not working
+    if (b >= 10) {
+        int a = 1;
+    }
+}
