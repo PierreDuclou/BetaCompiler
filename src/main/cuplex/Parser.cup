@@ -57,8 +57,10 @@ precedence left MUL, DIV, MOD;
 start with program;
 
 program ::= program var_declaration SEMICOLON {: System.out.println("1"); :}
-          | program func_definition {: System.out.println("2"); :}
-          | var_declaration SEMICOLON {: System.out.println("3"); :}
+          | var_declaration SEMICOLON {: System.out.println("2"); :}
+          | program var_assignation SEMICOLON {: System.out.println("52"); :}
+          | var_assignation SEMICOLON {: System.out.println("53"); :}
+          | program func_definition {: System.out.println("3"); :}
           | func_definition {: System.out.println("4"); :};
 
 //--- Function ----------------------------------------------------------------
