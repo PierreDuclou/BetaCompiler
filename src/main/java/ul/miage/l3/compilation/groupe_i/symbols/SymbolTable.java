@@ -3,8 +3,17 @@ package ul.miage.l3.compilation.groupe_i.symbols;
 import java.util.HashMap;
 
 public class SymbolTable {
+    /**
+     * The map of symbols
+     */
     private HashMap<Integer, Symbol> symbols;
-    private static SymbolTable instance = new SymbolTable();
+
+    private int key = 0;
+
+    /**
+     * The symbol table instance
+     */
+    private static final SymbolTable INSTANCE = new SymbolTable();
 
     /**
      * Constructor
@@ -14,21 +23,29 @@ public class SymbolTable {
     }
 
     /**
-     * Return the current instance
+     * Return the current INSTANCE
      *
-     * @return instance
+     * @return INSTANCE
      */
     public static SymbolTable getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     /**
      * Add the given symbol to the symbols map
      *
-     * @param key key of the symbol
      * @param symbol symbol to add
+     * @return last key added (current context)
      */
-    public void add(int key, Symbol symbol) {
-        symbols.put(key, symbol);
+    public int add(Symbol symbol) {
+        symbols.put(key++, symbol);
+        return key;
+    }
+
+    @Override
+    public String toString() {
+        return "SymbolTable{" +
+                "symbols=" + symbols +
+                '}';
     }
 }

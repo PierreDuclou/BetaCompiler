@@ -14,6 +14,16 @@
 // Header
 package generated.cuplex;
 
+import ul.miage.l3.compilation.groupe_i.symbols.*;
+
+// Action code
+action code {:
+    private SymbolTable table = SymbolTable.getInstance();
+    private Integer context = null;
+    private int nbVarLoc;
+    private int nbParam;
+:};
+
 // Verbose tokens
 terminal INT, VOID, RETURN, IF, ELSE, WHILE;
 
@@ -29,6 +39,7 @@ terminal OPEN_P, CLOSE_P, OPEN_B, CLOSE_B;
 // Custom tokens
 terminal ID, VALUE;
 
+non terminal entry;
 non terminal program;
 non terminal func_definition;
 non terminal func_type;
@@ -51,77 +62,76 @@ non terminal expression;
 non terminal term;
 non terminal factor;
 
-precedence left ADD, SUB;
-precedence left MUL, DIV, MOD;
+start with entry;
 
-start with program;
+entry ::= program {: System.out.println(context); :};
 
-program ::= program var_declaration SEMICOLON {: System.out.println("1"); :}
-          | var_declaration SEMICOLON {: System.out.println("2"); :}
-          | program var_assignation SEMICOLON {: System.out.println("52"); :}
-          | var_assignation SEMICOLON {: System.out.println("53"); :}
-          | program func_definition {: System.out.println("3"); :}
-          | func_definition {: System.out.println("4"); :};
+program ::= program var_declaration SEMICOLON
+          | var_declaration SEMICOLON
+          | program var_assignation SEMICOLON
+          | var_assignation SEMICOLON
+          | program func_definition
+          | func_definition;
 
 //--- Function ----------------------------------------------------------------
-func_definition ::= ID OPEN_P parameters CLOSE_P ARROW func_type block  {: System.out.println("5"); :};
-func_type       ::= INT | VOID  {: System.out.println("6"); :};
-parameters      ::= parameters COMMA var_declaration  {: System.out.println("7"); :}
-                  | var_declaration {: System.out.println("8"); :}
-                  |  {: System.out.println("9"); :};
-func_call       ::= ID OPEN_P arguments CLOSE_P  {: System.out.println("10"); :};
-arguments       ::= arguments COMMA expression  {: System.out.println("11"); :}
-                  | expression {: System.out.println("12"); :}
-                  |  {: System.out.println("13"); :};
+func_definition ::= ID:i {: context = table.add(new Function()); :} OPEN_P parameters CLOSE_P ARROW func_type block;
+func_type       ::= INT | VOID;
+parameters      ::= parameters COMMA var_declaration
+                  | var_declaration 
+                  | ;
+func_call       ::= ID OPEN_P arguments CLOSE_P;
+arguments       ::= arguments COMMA expression 
+                  | expression
+                  | ;
 
 //--- Block -------------------------------------------------------------------
-block       ::= OPEN_B block inner_block CLOSE_B {: System.out.println("14"); :}
-              | OPEN_B inner_block CLOSE_B {: System.out.println("15"); :}
-              | OPEN_B CLOSE_B  {: System.out.println("16"); :};
-inner_block ::= inner_block instruction {: System.out.println("17"); :}
-              | instruction {: System.out.println("18"); :}
-              | inner_block control_flow {: System.out.println("19"); :}
-              | control_flow {: System.out.println("19"); :};
+block       ::= OPEN_B block inner_block CLOSE_B
+              | OPEN_B inner_block CLOSE_B
+              | OPEN_B CLOSE_B;
+inner_block ::= inner_block instruction
+              | instruction
+              | inner_block control_flow
+              | control_flow;
 
 //--- Control flow ------------------------------------------------------------
-control_flow ::= if_statement {: System.out.println("20"); :}
-               | while_loop {: System.out.println("21"); :};
+control_flow ::= if_statement
+               | while_loop;
 
 // IF statement
-if_statement ::= IF condition block {: System.out.println("22"); :}
-               | IF condition block ELSE block {: System.out.println("23"); :};
+if_statement ::= IF condition block
+               | IF condition block ELSE block;
 
-condition    ::= OPEN_P comparison CLOSE_P {: System.out.println("24"); :};
-comparison   ::= expression LT expression {: System.out.println("25"); :}
-               | expression LE expression {: System.out.println("26"); :}
-               | expression EQ expression {: System.out.println("27"); :}
-               | expression GE expression {: System.out.println("28"); :}
-               | expression GT expression {: System.out.println("29"); :};
+condition    ::= OPEN_P comparison CLOSE_P;
+comparison   ::= expression LT expression
+               | expression LE expression
+               | expression EQ expression
+               | expression GE expression
+               | expression GT expression;
 
 // While loop
-while_loop ::= WHILE condition block {: System.out.println("30"); :};
+while_loop ::= WHILE condition block;
 
 //--- Instruction -------------------------------------------------------------
-instruction          ::= concrete_instruction SEMICOLON {: System.out.println("31"); :};
-concrete_instruction ::= var_declaration {: System.out.println("32"); :}
-                       | var_assignation {: System.out.println("33"); :}
-                       | return_statement {: System.out.println("34"); :}
-                       | func_call {: System.out.println("35"); :}
-                       | {: System.out.println("36"); :};
-var_declaration      ::= INT ID {: System.out.println("37"); :};
-var_assignation      ::= var_declaration ASSIGN expression {: System.out.println("38"); :}
-                       | ID ASSIGN expression {: System.out.println("39"); :};
-return_statement     ::= RETURN expression {: System.out.println("40"); :};
+instruction          ::= concrete_instruction SEMICOLON;
+concrete_instruction ::= var_declaration
+                       | var_assignation
+                       | return_statement
+                       | func_call
+                       |;
+var_declaration      ::= INT ID;
+var_assignation      ::= var_declaration ASSIGN expression
+                       | ID ASSIGN expression;
+return_statement     ::= RETURN expression;
 
 // Expression
-expression ::= term ADD expression {: System.out.println("41"); :}
-             | term SUB expression {: System.out.println("42"); :}
-             | term {: System.out.println("43"); :};
-term       ::= factor MUL term {: System.out.println("44"); :}
-             | factor DIV term {: System.out.println("45"); :}
-             | factor MOD term {: System.out.println("46"); :}
-             | factor {: System.out.println("47"); :};
-factor     ::= OPEN_P expression CLOSE_P {: System.out.println("48"); :}
-             | ID {: System.out.println("49"); :}
-             | func_call {: System.out.println("50"); :}
-             | VALUE {: System.out.println("51"); :};
+expression ::= term ADD expression
+             | term SUB expression
+             | term;
+term       ::= factor MUL term
+             | factor DIV term
+             | factor MOD term
+             | factor;
+factor     ::= OPEN_P expression CLOSE_P
+             | ID
+             | func_call
+             | VALUE;
