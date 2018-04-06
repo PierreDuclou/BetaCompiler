@@ -41,10 +41,25 @@ public class SymbolTable {
      * @return last key added (current context)
      */
     public int add(Symbol symbol) {
-        symbols.put(key++, symbol);
-        return key;
+        symbols.put(key, symbol);
+        return key++;
     }
 
+    /**
+     * Returns the symbol associated to the given key
+     *
+     * @param key wanted key
+     * @return symbol associated to the key
+     */
+    public Symbol get(int key) {
+        return symbols.get(key);
+    }
+
+    /**
+     * Returns a string representing the instance
+     *
+     * @return string representing the instance
+     */
     @Override
     public String toString() {
         return "SymbolTable{" +

@@ -39,8 +39,8 @@ Value = [0-9]+
 //--- Lexems ------------------------------------------------------------------
 
 // Verbose tokens
-"int"         { return new Symbol(Sym.INT); }
-"void"        { return new Symbol(Sym.VOID); }
+"int"         { return new Symbol(Sym.INT, yytext()); }
+"void"        { return new Symbol(Sym.VOID, yytext()); }
 "return"      { return new Symbol(Sym.RETURN); }
 "if"          { return new Symbol(Sym.IF); }
 "else"        { return new Symbol(Sym.ELSE); }

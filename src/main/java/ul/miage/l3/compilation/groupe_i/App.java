@@ -2,11 +2,13 @@ package ul.miage.l3.compilation.groupe_i;
 
 import generated.cuplex.ParserCup;
 import generated.cuplex.Yylex;
+import ul.miage.l3.compilation.groupe_i.symbols.Function;
 import ul.miage.l3.compilation.groupe_i.symbols.SymbolTable;
 import ul.miage.l3.compilation.groupe_i.utils.Prettifier;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.HashMap;
 
 /**
  * Classe principale

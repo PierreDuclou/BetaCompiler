@@ -18,7 +18,27 @@ import ul.miage.l3.compilation.groupe_i.symbols.*;
 
 // Action code
 action code {:
-    
+    Integer context = null;
+    boolean param;
+    SymbolTable table = SymbolTable.getInstance();
+
+    private void addVariable(String[] data) {
+        if (context == null) {
+            table.add(new GlobalVariable(data[0], data[1], data[2]));
+        } else {
+            Function f = (Function) table.get(context);
+            int rank = (f.getNumberOfLocalVariables() + 2) * 4;
+            table.add(new LocalVariable(data[0], data[1], rank, context, data[2]));
+            f.incrementNumberOfLocalVariables();
+        }
+    }
+
+    private void addParameter(String[] data) {
+        Function f = (Function) table.get(context);
+        int rank = (f.getNumberOfParameters() - 2) * 4;
+        table.add(new Parameter(data[0], data[1], rank, context));
+        f.incrementNumberOfParameters();
+    }
 :};
 
 // Verbose tokens
@@ -52,8 +72,8 @@ non terminal comparison;
 non terminal while_loop;
 non terminal instruction;
 non terminal concrete_instruction;
-non terminal var_declaration;
-non terminal var_assignation;
+non terminal String[] var_declaration;
+non terminal String[] var_assignation;
 non terminal return_statement;
 non terminal expression;
 non terminal term;
@@ -64,20 +84,26 @@ start with entry;
 entry ::= program;
 
 program ::= program var_declaration SEMICOLON
-          | var_declaration SEMICOLON
+          | var_declaration:v SEMICOLON {: addVariable(v); :}
           | program var_assignation SEMICOLON
-          | var_assignation SEMICOLON
+          | var_assignation:va SEMICOLON {: addVariable(va); :}
           | program func_definition
           | func_definition;
 
 //--- Function ----------------------------------------------------------------
-func_definition ::= ID OPEN_P parameters CLOSE_P ARROW func_type block;
-func_type       ::= INT | VOID;
+func_definition ::= ID:id {: context = table.add(new Function((String) id)); :} OPEN_P parameters CLOSE_P ARROW func_type:t block
+                    {:
+                        Function f = (Function) table.get(context);
+                        f.setType((String) t);
+                        context = null;
+                    :};
+
+func_type       ::= INT:i {: RESULT = i; :} | VOID:v {: RESULT = v; :};
 parameters      ::= parameters COMMA var_declaration
-                  | var_declaration 
+                  | var_declaration:v {: addParameter(v); :}
                   | ;
 func_call       ::= ID OPEN_P arguments CLOSE_P;
-arguments       ::= arguments COMMA expression 
+arguments       ::= arguments COMMA expression
                   | expression
                   | ;
 
@@ -110,25 +136,27 @@ while_loop ::= WHILE condition block;
 
 //--- Instruction -------------------------------------------------------------
 instruction          ::= concrete_instruction SEMICOLON;
-concrete_instruction ::= var_declaration
-                       | var_assignation
+concrete_instruction ::= var_declaration:v {: addVariable(v); :}
+                       | var_assignation:va
                        | return_statement
                        | func_call
-                       |;
-var_declaration      ::= INT ID;
-var_assignation      ::= var_declaration ASSIGN expression
-                       | ID ASSIGN expression;
+                       | ;
+
+var_declaration ::= INT:t ID:id ASSIGN expression:e {: RESULT = new String[] { (String) id, (String) t, (String) e }; :}
+                  | INT:t ID:id {: RESULT = new String[] { (String) id, (String) t }; :};
+
+var_assignation      ::= ID ASSIGN expression;
 return_statement     ::= RETURN expression;
 
 // Expression
 expression ::= term ADD expression
              | term SUB expression
-             | term;
+             | term:t {: RESULT = t; :};
 term       ::= factor MUL term
              | factor DIV term
              | factor MOD term
-             | factor;
+             | factor:f {: RESULT = f; :};
 factor     ::= OPEN_P expression CLOSE_P
-             | ID
              | func_call
-             | VALUE;
+             | VALUE:v {: RESULT = v; :}
+             | ID:id {: RESULT = id; :};

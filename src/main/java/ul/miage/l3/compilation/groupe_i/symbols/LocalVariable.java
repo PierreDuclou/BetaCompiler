@@ -3,9 +3,9 @@ package ul.miage.l3.compilation.groupe_i.symbols;
 public class LocalVariable extends ContextedSymbol {
     private int value;
 
-    public LocalVariable(String id, String type, int rank, String context, int value) {
+    public LocalVariable(String id, String type, int rank, int context, String value) {
         super(id, type, rank, context);
-        this.value = value;
+        this.value = value != null ? Integer.parseInt(value) : 0;
     }
 
     @Override
@@ -13,7 +13,7 @@ public class LocalVariable extends ContextedSymbol {
         return "LocalVariable{" +
                 "value=" + value +
                 ", rank=" + rank +
-                ", context='" + context + '\'' +
+                ", context=" + context +
                 ", id='" + id + '\'' +
                 ", type='" + type + '\'' +
                 '}';
