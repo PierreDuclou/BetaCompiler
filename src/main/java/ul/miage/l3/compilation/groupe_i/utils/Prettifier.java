@@ -3,10 +3,10 @@ package ul.miage.l3.compilation.groupe_i.utils;
 public class Prettifier {
 
     /**
-     * Prettify an ugly JSON-like string (multilined and indented)
+     * Prettify an ugly JSON-like string
      *
-     * @param uglyString
-     * @return pretty string
+     * @param uglyString string to prettify
+     * @return pretty string (multilined and indented)
      */
     public static String prettify(String uglyString) {
         String prettyJSON = "";

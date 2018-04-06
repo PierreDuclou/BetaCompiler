@@ -2,7 +2,7 @@ package ul.miage.l3.compilation.groupe_i.symbols;
 
 import java.util.HashMap;
 
-public class SymbolTable {
+public class SymbolsTable {
     /**
      * The map of symbols
      */
@@ -16,12 +16,12 @@ public class SymbolTable {
     /**
      * The symbol table instance
      */
-    private static final SymbolTable INSTANCE = new SymbolTable();
+    private static final SymbolsTable INSTANCE = new SymbolsTable();
 
     /**
      * Constructor
      */
-    private SymbolTable() {
+    private SymbolsTable() {
         symbols = new HashMap();
     }
 
@@ -30,7 +30,7 @@ public class SymbolTable {
      *
      * @return INSTANCE
      */
-    public static SymbolTable getInstance() {
+    public static SymbolsTable getInstance() {
         return INSTANCE;
     }
 
@@ -62,7 +62,7 @@ public class SymbolTable {
      */
     @Override
     public String toString() {
-        return "SymbolTable{" +
+        return "SymbolsTable{" +
                 "symbols=" + symbols +
                 '}';
     }

@@ -11,17 +11,38 @@
  * Version SNAPSHOT-1.0
  */
 
-// Header
+
+/*
+|------------------------------------------------------------------------------
+| Header
+|------------------------------------------------------------------------------
+| This section includes the namespace declaration and all imported packages
+|
+*/
+
 package generated.cuplex;
 
 import ul.miage.l3.compilation.groupe_i.symbols.*;
 
-// Action code
+
+/*
+|------------------------------------------------------------------------------
+| Action code
+|------------------------------------------------------------------------------
+| Pure Java code, executed before the parsing
+|
+*/
+
 action code {:
     Integer context = null;
     boolean param;
-    SymbolTable table = SymbolTable.getInstance();
+    SymbolTable table = SymbolsTable.getInstance();
 
+    /**
+     * Determine if a variable is global or local, then add it into the symbol table
+     *
+     * @param data attributes of the variable
+     */
     private void addVariable(String[] data) {
         if (context == null) {
             table.add(new GlobalVariable(data[0], data[1], data[2]));
@@ -33,6 +54,11 @@ action code {:
         }
     }
 
+    /**
+     * Add a parameter into the symbol table
+     *
+     * @param data attributes of the variable
+     */
     private void addParameter(String[] data) {
         Function f = (Function) table.get(context);
         int rank = (f.getNumberOfParameters() - 2) * 4;
@@ -40,6 +66,15 @@ action code {:
         f.incrementNumberOfParameters();
     }
 :};
+
+
+/*
+|------------------------------------------------------------------------------
+| Gramar declaration
+|------------------------------------------------------------------------------
+| This section includes all terminals and non terminals declaration of the gramar
+|
+*/
 
 // Verbose tokens
 terminal INT, VOID, RETURN, IF, ELSE, WHILE;
@@ -56,6 +91,7 @@ terminal OPEN_P, CLOSE_P, OPEN_B, CLOSE_B;
 // Custom tokens
 terminal ID, VALUE;
 
+// Non terminals
 non terminal entry;
 non terminal program;
 non terminal func_definition;
@@ -72,12 +108,21 @@ non terminal comparison;
 non terminal while_loop;
 non terminal instruction;
 non terminal concrete_instruction;
-non terminal String[] var_declaration;
-non terminal String[] var_assignation;
-non terminal return_statement;
 non terminal expression;
 non terminal term;
 non terminal factor;
+non terminal return_statement;
+non terminal String[] var_declaration;
+non terminal String[] var_assignation;
+
+
+/*
+|------------------------------------------------------------------------------
+| Productions
+|------------------------------------------------------------------------------
+| This section includes all productions of the gramar
+|
+*/
 
 start with entry;
 
@@ -145,8 +190,8 @@ concrete_instruction ::= var_declaration:v {: addVariable(v); :}
 var_declaration ::= INT:t ID:id ASSIGN expression:e {: RESULT = new String[] { (String) id, (String) t, (String) e }; :}
                   | INT:t ID:id {: RESULT = new String[] { (String) id, (String) t }; :};
 
-var_assignation      ::= ID ASSIGN expression;
-return_statement     ::= RETURN expression;
+var_assignation  ::= ID ASSIGN expression;
+return_statement ::= RETURN expression;
 
 // Expression
 expression ::= term ADD expression
