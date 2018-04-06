@@ -8,6 +8,9 @@ public class SymbolTable {
      */
     private HashMap<Integer, Symbol> symbols;
 
+    /**
+     *
+     */
     private int key = 0;
 
     /**

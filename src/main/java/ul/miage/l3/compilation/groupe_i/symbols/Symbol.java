@@ -1,6 +1,11 @@
 package ul.miage.l3.compilation.groupe_i.symbols;
 
-interface Symbol {
-    String id = null;
-    String type = null;
+abstract class Symbol {
+    String id;
+    String type;
+
+    public Symbol(String id, String type) {
+        this.id = id;
+        this.type = type;
+    }
 }

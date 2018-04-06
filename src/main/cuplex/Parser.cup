@@ -18,10 +18,7 @@ import ul.miage.l3.compilation.groupe_i.symbols.*;
 
 // Action code
 action code {:
-    private SymbolTable table = SymbolTable.getInstance();
-    private Integer context = null;
-    private int nbVarLoc;
-    private int nbParam;
+    
 :};
 
 // Verbose tokens
@@ -64,7 +61,7 @@ non terminal factor;
 
 start with entry;
 
-entry ::= program {: System.out.println(context); :};
+entry ::= program;
 
 program ::= program var_declaration SEMICOLON
           | var_declaration SEMICOLON
@@ -74,7 +71,7 @@ program ::= program var_declaration SEMICOLON
           | func_definition;
 
 //--- Function ----------------------------------------------------------------
-func_definition ::= ID:i {: context = table.add(new Function()); :} OPEN_P parameters CLOSE_P ARROW func_type block;
+func_definition ::= ID OPEN_P parameters CLOSE_P ARROW func_type block;
 func_type       ::= INT | VOID;
 parameters      ::= parameters COMMA var_declaration
                   | var_declaration 
