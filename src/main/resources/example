@@ -1,9 +1,7 @@
+int b;
+
 factorielle(int n) -> int {
-    if (n <= 1) {
-        return 1;
-    } else {
-        return factorielle(n - 1);
-    }
+    return 1;
 }
 
 main() -> void {
@@ -14,17 +12,9 @@ main() -> void {
     }
 
     while (b < 10) {
-        if (b == 0) {
-            if (factorielle(4) == 24) {
-                b = b + 2;
-            }
-        }
-
         b = b + 1;
     }
 
     int a = factorielle(b);
-    int c = -45;
+    int c = 45;
 }
-
-int b;

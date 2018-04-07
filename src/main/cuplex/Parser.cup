@@ -16,13 +16,14 @@
 |------------------------------------------------------------------------------
 | Header
 |------------------------------------------------------------------------------
-| This section includes the namespace declaration and all imported packages
+| This section includes the namespace declaration and all packages imports
 |
 */
 
 package generated.cuplex;
 
 import ul.miage.l3.compilation.groupe_i.symbols.*;
+import ul.miage.l3.compilation.groupe_i.ast.*;
 
 
 /*
@@ -35,8 +36,8 @@ import ul.miage.l3.compilation.groupe_i.symbols.*;
 
 action code {:
     Integer context = null;
-    boolean param;
     SymbolsTable table = SymbolsTable.getInstance();
+    AbstractSyntaxTree tree = AbstractSyntaxTree.getInstance();
 
     /**
      * Determine if a variable is global or local, then add it into the symbol table
@@ -44,6 +45,7 @@ action code {:
      * @param data attributes of the variable
      */
     private void addVariable(String[] data) {
+        System.out.println(data[0]);
         if (context == null) {
             table.add(new GlobalVariable(data[0], data[1], data[2]));
         } else {
@@ -188,7 +190,7 @@ concrete_instruction ::= var_declaration:v {: addVariable(v); :}
                        | ;
 
 var_declaration ::= INT:t ID:id ASSIGN expression:e {: RESULT = new String[] { (String) id, (String) t, (String) e }; :}
-                  | INT:t ID:id {: RESULT = new String[] { (String) id, (String) t }; :};
+                  | INT:t ID:id {: RESULT = new String[] { (String) id, (String) t, null }; :};
 
 var_assignation  ::= ID ASSIGN expression;
 return_statement ::= RETURN expression;
@@ -204,5 +206,4 @@ term       ::= factor MUL term
 factor     ::= OPEN_P expression CLOSE_P
              | func_call
              | VALUE:v {: RESULT = v; :}
-             | SUB VALUE:val {: RESULT = "-" + val; :}
              | ID:id {: RESULT = id; :};
