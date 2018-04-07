@@ -15,9 +15,9 @@ public class LocalVariable extends ContextedSymbol {
      * @param context key of the related function's in the symbols table
      * @param value value of the variable
      */
-    public LocalVariable(String id, String type, int rank, int context, String value) {
+    public LocalVariable(String id, String type, int rank, int context, int value) {
         super(id, type, rank, context);
-        this.value = value != null ? Integer.parseInt(value) : 0;
+        this.value = value;
     }
 
     /**

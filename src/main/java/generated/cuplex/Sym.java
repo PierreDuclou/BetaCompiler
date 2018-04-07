@@ -14,17 +14,17 @@ public interface Sym {
   public static final int ELSE = 6;
   public static final int INT = 2;
   public static final int WHILE = 7;
-  public static final int VALUE = 27;
-  public static final int OPEN_B = 24;
-  public static final int CLOSE_P = 23;
+  public static final int VALUE = 28;
+  public static final int OPEN_B = 25;
+  public static final int CLOSE_P = 24;
   public static final int RETURN = 4;
   public static final int IF = 5;
   public static final int GT = 18;
-  public static final int ID = 26;
+  public static final int ID = 27;
   public static final int LE = 20;
   public static final int SUB = 12;
   public static final int COMMA = 9;
-  public static final int CLOSE_B = 25;
+  public static final int CLOSE_B = 26;
   public static final int EOF = 0;
   public static final int DIV = 13;
   public static final int ADD = 11;
@@ -33,9 +33,10 @@ public interface Sym {
   public static final int ARROW = 10;
   public static final int EQ = 21;
   public static final int ASSIGN = 16;
+  public static final int DIFF = 22;
   public static final int MUL = 14;
   public static final int VOID = 3;
-  public static final int OPEN_P = 22;
+  public static final int OPEN_P = 23;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -59,6 +60,7 @@ public interface Sym {
   "GE",
   "LE",
   "EQ",
+  "DIFF",
   "OPEN_P",
   "CLOSE_P",
   "OPEN_B",

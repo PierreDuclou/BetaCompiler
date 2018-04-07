@@ -22,6 +22,7 @@ public class AbstractSyntaxTree {
 
     /**
      * Getter : INSTANCE
+     *
      * @return INSTANCE
      */
     public static AbstractSyntaxTree getInstance() {

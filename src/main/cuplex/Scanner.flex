@@ -30,7 +30,7 @@ import java_cup.runtime.Symbol;
 Comment = {InlineComment} | {MultilineComment}
 InlineComment = "//" [^\r\n]* (\r|\n|\r\n)?
 MultilineComment = "/*" [^*] ~"*/" | "/*" "*"+ "/"
-Identifier = [a-zA-Z1-9_]+
+Identifier = [a-zA-Z_]+ [1-9_]*
 Whitespaces = [\s\t\r\n]+
 Value = [0-9]+
 
@@ -56,13 +56,13 @@ Value = [0-9]+
 "-"           { return new Symbol(Sym.SUB); }
 "/"           { return new Symbol(Sym.DIV); }
 "*"           { return new Symbol(Sym.MUL); }
-"%"           { return new Symbol(Sym.MOD); }
 "="           { return new Symbol(Sym.ASSIGN); }
 "<"           { return new Symbol(Sym.LT); }
 ">"           { return new Symbol(Sym.GT); }
 ">="          { return new Symbol(Sym.GE); }
 "<="          { return new Symbol(Sym.LE); }
 "=="          { return new Symbol(Sym.EQ); }
+"!="          { return new Symbol(Sym.DIFF); }
 
 // Wrappers
 "("           { return new Symbol(Sym.OPEN_P); }

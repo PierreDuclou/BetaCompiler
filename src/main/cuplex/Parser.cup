@@ -36,36 +36,46 @@ import ul.miage.l3.compilation.groupe_i.ast.*;
 
 action code {:
     Integer context = null;
+    Node currentNode = null;
+    boolean isParameter;
     SymbolsTable table = SymbolsTable.getInstance();
     AbstractSyntaxTree tree = AbstractSyntaxTree.getInstance();
 
     /**
      * Determine if a variable is global or local, then add it into the symbol table
      *
-     * @param data attributes of the variable
+     * @param id id of the variable
+     * @param type type of the variable
+     * @param value value of the variable
      */
-    private void addVariable(String[] data) {
-        System.out.println(data[0]);
+    private int addVariable(String id, String type, int value) {
+        int key;
+
         if (context == null) {
-            table.add(new GlobalVariable(data[0], data[1], data[2]));
+            key = table.add(new GlobalVariable(id, type, value));
         } else {
             Function f = (Function) table.get(context);
             int rank = (f.getNumberOfLocalVariables() + 2) * 4;
-            table.add(new LocalVariable(data[0], data[1], rank, context, data[2]));
+            key = table.add(new LocalVariable(id, type, rank, context, value));
             f.incrementNumberOfLocalVariables();
         }
+
+        return key;
     }
 
     /**
      * Add a parameter into the symbol table
      *
-     * @param data attributes of the variable
+     * @param id id of the variable
+     * @param type type of the variable
      */
-    private void addParameter(String[] data) {
+    private int addParameter(String id, String type) {
         Function f = (Function) table.get(context);
         int rank = (f.getNumberOfParameters() - 2) * 4;
-        table.add(new Parameter(data[0], data[1], rank, context));
+        int key = table.add(new Parameter(id, type, rank, context));
         f.incrementNumberOfParameters();
+
+        return key;
     }
 :};
 
@@ -85,7 +95,7 @@ terminal INT, VOID, RETURN, IF, ELSE, WHILE;
 terminal SEMICOLON, COMMA, ARROW;
 
 // Operators
-terminal ADD, SUB, DIV, MUL, MOD, ASSIGN, LT, GT, GE, LE, EQ;
+terminal ADD, SUB, DIV, MUL, MOD, ASSIGN, LT, GT, GE, LE, EQ, DIFF;
 
 // Wrappers
 terminal OPEN_P, CLOSE_P, OPEN_B, CLOSE_B;
@@ -110,12 +120,12 @@ non terminal comparison;
 non terminal while_loop;
 non terminal instruction;
 non terminal concrete_instruction;
-non terminal expression;
-non terminal term;
-non terminal factor;
+non terminal Node expression;
+non terminal Node term;
+non terminal Node factor;
 non terminal return_statement;
-non terminal String[] var_declaration;
-non terminal String[] var_assignation;
+non terminal InnerNode var_declaration;
+non terminal InnerNode var_assignation;
 
 
 /*
@@ -131,14 +141,16 @@ start with entry;
 entry ::= program;
 
 program ::= program var_declaration SEMICOLON
-          | var_declaration:v SEMICOLON {: addVariable(v); :}
+          | var_declaration SEMICOLON
           | program var_assignation SEMICOLON
-          | var_assignation:va SEMICOLON {: addVariable(va); :}
+          | var_assignation SEMICOLON
           | program func_definition
           | func_definition;
 
 //--- Function ----------------------------------------------------------------
-func_definition ::= ID:id {: context = table.add(new Function((String) id)); :} OPEN_P parameters CLOSE_P ARROW func_type:t block
+func_definition ::= ID:id {: context = table.add(new Function((String) id)); :}
+                    OPEN_P {: isParameter = true; :} parameters {: isParameter = false; :} 
+                    CLOSE_P ARROW func_type:t block
                     {:
                         Function f = (Function) table.get(context);
                         f.setType((String) t);
@@ -147,7 +159,7 @@ func_definition ::= ID:id {: context = table.add(new Function((String) id)); :} 
 
 func_type       ::= INT:i {: RESULT = i; :} | VOID:v {: RESULT = v; :};
 parameters      ::= parameters COMMA var_declaration
-                  | var_declaration:v {: addParameter(v); :}
+                  | var_declaration
                   | ;
 func_call       ::= ID OPEN_P arguments CLOSE_P;
 arguments       ::= arguments COMMA expression
@@ -175,6 +187,7 @@ condition    ::= OPEN_P comparison CLOSE_P;
 comparison   ::= expression LT expression
                | expression LE expression
                | expression EQ expression
+               | expression DIFF expression
                | expression GE expression
                | expression GT expression;
 
@@ -183,14 +196,32 @@ while_loop ::= WHILE condition block;
 
 //--- Instruction -------------------------------------------------------------
 instruction          ::= concrete_instruction SEMICOLON;
-concrete_instruction ::= var_declaration:v {: addVariable(v); :}
-                       | var_assignation:va
+concrete_instruction ::= var_declaration
+                       | var_assignation
                        | return_statement
                        | func_call
                        | ;
 
-var_declaration ::= INT:t ID:id ASSIGN expression:e {: RESULT = new String[] { (String) id, (String) t, (String) e }; :}
-                  | INT:t ID:id {: RESULT = new String[] { (String) id, (String) t, null }; :};
+var_declaration ::= INT:t ID:id ASSIGN expression:e
+                    {:
+                        LeafNode tmp = (LeafNode) e;
+                        int key = addVariable(id.toString(), t.toString(), e instanceof LeafNode ? tmp.getValue() : 0);
+
+                        // If the variable is local
+                        if (context != null) {
+                            RESULT = new InnerNode(NodeSymbol.ASSIGN);
+                            LeafNode left = new LeafNode(NodeSymbol.VARIABLE, key);
+                            RESULT.addChild(left);
+                            RESULT.addChild(e);
+                        } else {
+                            RESULT = null;
+                        }
+                    :}
+                  | INT:t ID:id 
+                    {:
+                        if (isParameter)
+                            addParameter(id.toString(), t.toString());
+                    :};
 
 var_assignation  ::= ID ASSIGN expression;
 return_statement ::= RETURN expression;
@@ -205,5 +236,5 @@ term       ::= factor MUL term
              | factor:f {: RESULT = f; :};
 factor     ::= OPEN_P expression CLOSE_P
              | func_call
-             | VALUE:v {: RESULT = v; :}
-             | ID:id {: RESULT = id; :};
+             | VALUE:v {: RESULT = new LeafNode(NodeSymbol.CONST, v.toString()); :}
+             | ID:id {: RESULT = new LeafNode(NodeSymbol.VARIABLE); :};

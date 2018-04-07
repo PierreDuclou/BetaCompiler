@@ -13,9 +13,9 @@ public class GlobalVariable extends Symbol {
      * @param type type of the variable
      * @param value value of the variable
      */
-    public GlobalVariable(String id, String type, String value) {
+    public GlobalVariable(String id, String type, int value) {
         super(id, type);
-        this.value = value != null ? Integer.parseInt(value) : 0;
+        this.value = value;
     }
 
     /**
