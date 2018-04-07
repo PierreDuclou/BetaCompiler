@@ -29,14 +29,14 @@ import ul.miage.l3.compilation.groupe_i.symbols.*;
 |------------------------------------------------------------------------------
 | Action code
 |------------------------------------------------------------------------------
-| Pure Java code, executed before the parsing
+| Pure Java code (executed before the parsing)
 |
 */
 
 action code {:
     Integer context = null;
     boolean param;
-    SymbolTable table = SymbolsTable.getInstance();
+    SymbolsTable table = SymbolsTable.getInstance();
 
     /**
      * Determine if a variable is global or local, then add it into the symbol table
@@ -204,4 +204,5 @@ term       ::= factor MUL term
 factor     ::= OPEN_P expression CLOSE_P
              | func_call
              | VALUE:v {: RESULT = v; :}
+             | SUB VALUE:val {: RESULT = "-" + val; :}
              | ID:id {: RESULT = id; :};
