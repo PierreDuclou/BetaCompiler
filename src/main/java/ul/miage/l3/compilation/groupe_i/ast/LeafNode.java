@@ -1,5 +1,16 @@
 package ul.miage.l3.compilation.groupe_i.ast;
 
+/**
+ * Represents an AST leaf node (that does not have any children)
+ *
+ * @author Jeremy Thomas
+ * @author Ouafa Bourekhsas
+ * @author Salme Ould Ahmed
+ * @author Theo Cominolo
+ * @author Pierre Duclou
+ *
+ * @version SNAPSHOT-1.0
+ */
 public class LeafNode extends Node {
     /**
      * Value of the leaf (handling constant node)

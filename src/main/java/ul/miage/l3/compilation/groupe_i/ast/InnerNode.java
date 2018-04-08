@@ -3,6 +3,17 @@ package ul.miage.l3.compilation.groupe_i.ast;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Represents an AST inner node (that has children)
+ *
+ * @author Jeremy Thomas
+ * @author Ouafa Bourekhsas
+ * @author Salme Ould Ahmed
+ * @author Theo Cominolo
+ * @author Pierre Duclou
+ *
+ * @version SNAPSHOT-1.0
+ */
 public class InnerNode extends Node {
     /**
      * Children of the node

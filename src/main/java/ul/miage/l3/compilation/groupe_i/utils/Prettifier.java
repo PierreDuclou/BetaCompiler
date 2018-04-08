@@ -1,5 +1,17 @@
 package ul.miage.l3.compilation.groupe_i.utils;
 
+
+/**
+ * String prettifier
+ *
+ * @author Jérémy Thomas,
+ * @author Ouafa Bourekhsas,
+ * @author Salme Ould Ahmed,
+ * @author Théo Cominolo,
+ * @author Pierre Duclou
+ *
+ * @version SNAPSHOT-1.0
+ */
 public class Prettifier {
 
     /**

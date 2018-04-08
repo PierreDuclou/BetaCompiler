@@ -1,5 +1,17 @@
 package ul.miage.l3.compilation.groupe_i.symbols;
 
+
+/**
+ * Represents a symbol stored in symbols table
+ *
+ * @author Jeremy Thomas
+ * @author Ouafa Bourekhsas
+ * @author Salme Ould Ahmed
+ * @author Theo Cominolo
+ * @author Pierre Duclou
+ *
+ * @version SNAPSHOT-1.0
+ */
 public abstract class Symbol {
     /**
      * Identifier of the symbol

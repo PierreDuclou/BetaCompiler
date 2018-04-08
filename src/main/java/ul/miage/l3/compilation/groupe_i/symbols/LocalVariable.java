@@ -1,5 +1,16 @@
 package ul.miage.l3.compilation.groupe_i.symbols;
 
+/**
+ * Represents a local variable in symbols table
+ *
+ * @author Jeremy Thomas
+ * @author Ouafa Bourekhsas
+ * @author Salme Ould Ahmed
+ * @author Theo Cominolo
+ * @author Pierre Duclou
+ *
+ * @version SNAPSHOT-1.0
+ */
 public class LocalVariable extends ContextedSymbol {
     /**
      * Value of the variable

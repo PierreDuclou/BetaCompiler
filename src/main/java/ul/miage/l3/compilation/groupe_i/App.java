@@ -10,19 +10,23 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 /**
- * Classe principale
+ * Main class (contains entry point)
  *
- * Auteurs :
- *      Jérémy Thomas,
- *      Ouafa Bourekhsas,
- *      Salme Ould Ahmed,
- *      Théo Cominolo,
- *      Pierre Duclou
+ * @author Jérémy Thomas,
+ * @author Ouafa Bourekhsas,
+ * @author Salme Ould Ahmed,
+ * @author Théo Cominolo,
+ * @author Pierre Duclou
  *
- * Version SNAPSHOT-1.0
+ * @version SNAPSHOT-1.0
  */
 public class App 
 {
+    /**
+     * Entry point
+     *
+     * @param args command line arguments
+     */
     public static void main( String[] args ) {
         try {
             ParserCup pc = new ParserCup(new Yylex(new FileReader("src/main/resources/example")));

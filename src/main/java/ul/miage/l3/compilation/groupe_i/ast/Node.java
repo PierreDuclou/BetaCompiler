@@ -1,5 +1,16 @@
 package ul.miage.l3.compilation.groupe_i.ast;
 
+/**
+ * Abstract representation of an AST node
+ *
+ * @author Jeremy Thomas
+ * @author Ouafa Bourekhsas
+ * @author Salme Ould Ahmed
+ * @author Theo Cominolo
+ * @author Pierre Duclou
+ *
+ * @version SNAPSHOT-1.0
+ */
 public abstract class Node {
     /**
      * Associated symbol (see enum NodeSymbol)

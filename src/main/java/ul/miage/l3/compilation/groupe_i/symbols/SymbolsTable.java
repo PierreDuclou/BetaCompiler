@@ -2,6 +2,18 @@ package ul.miage.l3.compilation.groupe_i.symbols;
 
 import java.util.HashMap;
 
+
+/**
+ * Represents a symbols table
+ *
+ * @author Jeremy Thomas
+ * @author Ouafa Bourekhsas
+ * @author Salme Ould Ahmed
+ * @author Theo Cominolo
+ * @author Pierre Duclou
+ *
+ * @version SNAPSHOT-1.0
+ */
 public class SymbolsTable {
     /**
      * The map of symbols

@@ -1,5 +1,17 @@
 package ul.miage.l3.compilation.groupe_i.symbols;
 
+
+/**
+ * Represents a function in symbols table
+ *
+ * @author Jeremy Thomas
+ * @author Ouafa Bourekhsas
+ * @author Salme Ould Ahmed
+ * @author Theo Cominolo
+ * @author Pierre Duclou
+ *
+ * @version SNAPSHOT-1.0
+ */
 public class Function extends Symbol {
     /**
      * Number of function's parameters
@@ -23,10 +35,10 @@ public class Function extends Symbol {
     /**
      * Constructor
      *
-     * @param id
-     * @param type
-     * @param numberOfParameters
-     * @param numberOfLocalVariables
+     * @param id id
+     * @param type type
+     * @param numberOfParameters numberOfParameters
+     * @param numberOfLocalVariables numberOfLocalVariables
      */
     public Function(String id, String type, int numberOfParameters, int numberOfLocalVariables) {
         super(id, type);
