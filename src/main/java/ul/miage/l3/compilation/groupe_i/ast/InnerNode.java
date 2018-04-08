@@ -48,7 +48,7 @@ public class InnerNode extends Node {
      */
     public InnerNode(NodeSymbol NODE_SYMBOL, int symbolsTableKey, LinkedList<Node> children) {
         super(NODE_SYMBOL, symbolsTableKey);
-        this.children = children;
+        addChild(children);
     }
 
     /**
@@ -66,6 +66,7 @@ public class InnerNode extends Node {
      * @param node node to add
      */
     public void addChild(Node node) {
+        node.parent = this;
         children.addLast(node);
     }
 
@@ -75,7 +76,12 @@ public class InnerNode extends Node {
      * @param nodes nodes to add
      */
     public void addChild(List<Node> nodes) {
-        children.addAll(nodes);
+        for (Node n: nodes) {
+            if (n != null) {
+                n.parent = this;
+                children.addLast(n);
+            }
+        }
     }
 
     /**
@@ -88,6 +94,7 @@ public class InnerNode extends Node {
         return "InnerNode{" +
                 "NODE_SYMBOL=" + NODE_SYMBOL +
                 ", symbolsTableKey=" + symbolsTableKey +
+                ", parent=" + (parent != null ? parent.NODE_SYMBOL : null) +
                 ", children=" + children +
                 '}';
     }

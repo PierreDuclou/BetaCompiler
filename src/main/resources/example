@@ -1,14 +1,19 @@
-int b;
+int b = 123;
 
 factorielle(int n) -> int {
     if (n <= 1) {
         return 1;
     }
 
-    return n * factorielle(n-1);
+    return n;
+}
+
+someFunc(int x, int y, int z) -> int {
+    return x + y + z;
 }
 
 main() -> void {
+    int a;
     b = 11 + (12 * 5);
 
     if (b > 0) {
@@ -19,10 +24,11 @@ main() -> void {
         b = 123;
     }
 
-    int a = factorielle(b);
+    a = factorielle(b);
     int c = 45;
     int d = c;
     a = d;
     write(a);
     int k = read();
+    someFunc(a, b, c);
 }

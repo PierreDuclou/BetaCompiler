@@ -1,6 +1,7 @@
 package ul.miage.l3.compilation.groupe_i.assembly;
 
 import ul.miage.l3.compilation.groupe_i.ast.InnerNode;
+import ul.miage.l3.compilation.groupe_i.ast.Node;
 
 public class GenerableFactory {
     /**
@@ -9,7 +10,7 @@ public class GenerableFactory {
      * @param node corresponding AST node
      * @return generable associated to the node's symbol
      */
-    Generable getGenerable(InnerNode node) {
+    public static Generable getGenerable(Node node) {
         Generable g;
 
         switch (node.getNodeSymbol()) {
@@ -53,5 +54,4 @@ public class GenerableFactory {
 
         return g;
     }
-
 }

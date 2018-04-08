@@ -1,8 +1,9 @@
 package ul.miage.l3.compilation.groupe_i.symbols;
 
-import ul.miage.l3.compilation.groupe_i.symbols.expections.UndeclaredSymbolException;
+import ul.miage.l3.compilation.groupe_i.symbols.exceptions.UndeclaredSymbolException;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 
 /**
@@ -16,7 +17,7 @@ import java.util.HashMap;
  *
  * @version SNAPSHOT-1.0
  */
-public class SymbolsTable {
+public class SymbolsTable implements Iterable<Integer> {
     /**
      * The map of symbols
      */
@@ -118,5 +119,10 @@ public class SymbolsTable {
         return "SymbolsTable{" +
                 "symbols=" + symbols +
                 '}';
+    }
+
+    @Override
+    public Iterator<Integer> iterator() {
+        return symbols.keySet().iterator();
     }
 }

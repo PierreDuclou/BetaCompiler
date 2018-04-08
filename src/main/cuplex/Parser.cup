@@ -40,7 +40,7 @@ action code {:
     Integer context = null;
     SymbolsTable table = SymbolsTable.getInstance();
     AbstractSyntaxTree tree = AbstractSyntaxTree.getInstance();
-    int lineNumber = 0;
+    boolean isParameter = false;
 
     /**
      * Determine if a variable is global or local, then add it into the symbols table
@@ -57,7 +57,7 @@ action code {:
             key = table.add(new GlobalVariable(id, type, value));
         } else {
             Function f = (Function) table.get(context);
-            int rank = (f.getNumberOfLocalVariables() + 2) * 4;
+            int rank = f.getNumberOfLocalVariables();
             key = table.add(new LocalVariable(id, type, rank, context, value));
             f.incrementNumberOfLocalVariables();
         }
@@ -74,7 +74,7 @@ action code {:
      */
     private int addParameter(String id, String type) {
         Function f = (Function) table.get(context);
-        int rank = (f.getNumberOfParameters() - 2) * 4;
+        int rank = f.getNumberOfParameters();
         int key = table.add(new Parameter(id, type, rank, context));
         f.incrementNumberOfParameters();
 
@@ -198,8 +198,8 @@ program ::= program var_declaration SEMICOLON {: RESULT = new LinkedList(); :}
           
 //--- Function ----------------------------------------------------------------
 func_definition ::= ID:id {: context = table.add(new Function((String) id)); :}
-                    OPEN_P parameters
-                    CLOSE_P ARROW func_type:t block:b
+                    OPEN_P {: isParameter = true; :} parameters CLOSE_P {: isParameter = false; :}
+                    ARROW func_type:t block:b
                     {:
                         Function f = (Function) table.get(context);
                         f.setType((String) t);
@@ -215,7 +215,15 @@ func_call       ::= ID:id OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(N
                   | READ OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.READ, -999, a); :}
                   | WRITE OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.WRITE, -999, a); :};
 
-arguments       ::= arguments:a COMMA expression:ex {: a.add(ex); :}
+arguments       ::= arguments:a COMMA expression:ex 
+                    {:
+                        if (a != null) {
+                            a.add(ex);
+                            RESULT = a;
+                        } else {
+                            RESULT = new LinkedList();
+                        }
+                    :}
                   | expression:e {: RESULT = new LinkedList(Arrays.asList(new Node[] {e})); :}
                   | {: RESULT = new LinkedList(); :};
 
@@ -282,10 +290,8 @@ var_declaration ::= INT:t ID:id ASSIGN expression:e
                     :}
                   | INT:t ID:id
                     {:
-                        if (context != null)
-                            addParameter(id.toString(), t.toString());
-                        else
-                            addVariable(id.toString(), t.toString(), 0);
+                        if (isParameter) addParameter(id.toString(), t.toString());
+                        else addVariable(id.toString(), t.toString(), 0);
                     :};
 
 // Variable assignation

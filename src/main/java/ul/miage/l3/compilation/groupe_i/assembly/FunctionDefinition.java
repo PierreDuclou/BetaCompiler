@@ -1,6 +1,9 @@
 package ul.miage.l3.compilation.groupe_i.assembly;
 
 import ul.miage.l3.compilation.groupe_i.ast.InnerNode;
+import ul.miage.l3.compilation.groupe_i.ast.Node;
+import ul.miage.l3.compilation.groupe_i.symbols.Function;
+import ul.miage.l3.compilation.groupe_i.symbols.SymbolsTable;
 
 public class FunctionDefinition extends Generable {
     /**
@@ -8,12 +11,30 @@ public class FunctionDefinition extends Generable {
      *
      * @param node node
      */
-    public FunctionDefinition(InnerNode node) {
+    public FunctionDefinition(Node node) {
         super(node);
     }
 
     @Override
     public String generate() {
-        return null;
+        Function sym = (Function) SymbolsTable.getInstance().get(node.getSymbolsTableKey());
+
+        String ret = '\n' + sym.getId() + ":\n" +
+                "PUSH(LP)\n" +
+                "PUSH(BP)\n" +
+                "MOVE(SP, BP)\n" +
+                "ALLOCATE(" + sym.getNumberOfLocalVariables() + ")\n";
+
+        for (Node child: ((InnerNode) node).getChildren()) {
+            ret += GenerableFactory.getGenerable(child).generate();
+        }
+
+        ret += "\nreturn_" + sym.getId() + ":\n" +
+                "DEALLOCATE(" + sym.getNumberOfLocalVariables() + ")\n" +
+                "POP(BP)\n" +
+                "POP(LP)\n" +
+                "RTN()\n";
+
+        return ret;
     }
 }

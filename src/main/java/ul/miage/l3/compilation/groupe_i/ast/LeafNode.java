@@ -1,5 +1,10 @@
 package ul.miage.l3.compilation.groupe_i.ast;
 
+import ul.miage.l3.compilation.groupe_i.symbols.GlobalVariable;
+import ul.miage.l3.compilation.groupe_i.symbols.LocalVariable;
+import ul.miage.l3.compilation.groupe_i.symbols.Symbol;
+import ul.miage.l3.compilation.groupe_i.symbols.SymbolsTable;
+
 /**
  * Represents an AST leaf node (that does not have any children)
  *
@@ -45,6 +50,14 @@ public class LeafNode extends Node {
      */
     public LeafNode(NodeSymbol NODE_SYMBOL, int symbolsTableKey) {
         super(NODE_SYMBOL, symbolsTableKey);
+        Symbol sym = SymbolsTable.getInstance().get(symbolsTableKey);
+
+        if (sym instanceof GlobalVariable)
+            value = ((GlobalVariable) sym).getValue();
+
+        if (sym instanceof LocalVariable)
+            value = ((LocalVariable) sym).getValue();
+
     }
 
     /**

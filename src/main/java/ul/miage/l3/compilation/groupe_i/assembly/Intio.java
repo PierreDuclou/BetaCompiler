@@ -1,6 +1,6 @@
 package ul.miage.l3.compilation.groupe_i.assembly;
 
-import ul.miage.l3.compilation.groupe_i.ast.InnerNode;
+import ul.miage.l3.compilation.groupe_i.ast.Node;
 
 public class Intio extends Generable {
     /**
@@ -8,7 +8,7 @@ public class Intio extends Generable {
      *
      * @param node node
      */
-    public Intio(InnerNode node) {
+    public Intio(Node node) {
         super(node);
     }
 

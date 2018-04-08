@@ -18,6 +18,11 @@ public abstract class Node {
     protected NodeSymbol NODE_SYMBOL;
 
     /**
+     * Ascending link to upper node
+     */
+    protected InnerNode parent = null;
+
+    /**
      * Key that links the node to the symbols table
      */
     int symbolsTableKey;
@@ -48,6 +53,15 @@ public abstract class Node {
      */
     public NodeSymbol getNodeSymbol() {
         return NODE_SYMBOL;
+    }
+
+    /**
+     * Getter : parent
+     *
+     * @return parent
+     */
+    public InnerNode getParent() {
+        return parent;
     }
 
     /**

@@ -31,6 +31,14 @@ public class GlobalVariable extends Symbol {
     }
 
     /**
+     * Getter : value
+     * @return value
+     */
+    public int getValue() {
+        return value;
+    }
+
+    /**
      * String representation of the instance
      *
      * @return a string representing the instance
