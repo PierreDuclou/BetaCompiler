@@ -78,6 +78,33 @@ action code {:
 
         return key;
     }
+
+    /**
+     * Returns a node representing a comparison
+     *
+     * @param symbol logical operator
+     * @param left left member
+     * @param right right member
+     * @return node representing a comparison
+     */
+    private InnerNode addComparison(NodeSymbol symbol, Node left, Node right) {
+        return new InnerNode(symbol, -404, new LinkedList(Arrays.asList(new Node[] { left, right })));
+    }
+
+    private InnerNode addIfStatement(Node comparison, LinkedList<Node> _then) {
+        InnerNode ret = new InnerNode(NodeSymbol.IF, -404);
+        ret.addChild(comparison);
+        ret.addChild(new InnerNode(NodeSymbol.THEN, -404, _then));
+        return ret;
+    }
+
+    private InnerNode addIfStatement(Node comparison, LinkedList<Node> _then, LinkedList<Node> _else) {
+        InnerNode ret = addIfStatement(comparison, _then);
+        ret.addChild(new InnerNode(NodeSymbol.ELSE, -404, _else));
+        return ret;
+    }
+
+    // private InnerNode addExpression(NodeSymbol symbol, Node left, Node right)
 :};
 
 
@@ -114,11 +141,11 @@ non terminal InnerNode func_call;
 non terminal LinkedList<Node> arguments;
 non terminal LinkedList<Node> block;
 non terminal LinkedList<Node> inner_block;
-non terminal control_flow;
-non terminal if_statement;
-non terminal condition;
-non terminal comparison;
-non terminal while_loop;
+non terminal InnerNode control_flow;
+non terminal InnerNode if_statement;
+non terminal InnerNode condition;
+non terminal InnerNode comparison;
+non terminal InnerNode while_loop;
 non terminal InnerNode instruction;
 non terminal InnerNode concrete_instruction;
 non terminal Node expression;
@@ -183,26 +210,26 @@ inner_block ::= inner_block:in instruction:i
                         RESULT = new LinkedList();
                     }
                 :}
-              | inner_block control_flow {: RESULT = new LinkedList(); :}
+              | inner_block:i control_flow:c {: i.add(c); RESULT = i; :}
               | {: RESULT = new LinkedList(); :};
 
 //--- Control flow ------------------------------------------------------------
-control_flow ::= if_statement | while_loop;
+control_flow ::= if_statement:i {: RESULT = i; :} | while_loop:w {: RESULT = w; :};
 
 // IF statement
-if_statement ::= IF condition block
-               | IF condition block ELSE block;
+if_statement ::= IF condition:c block:b {: RESULT = addIfStatement(c, b); :}
+               | IF condition:c block:b1 ELSE block:b2 {: RESULT = addIfStatement(c, b1, b2); :};
 
-condition    ::= OPEN_P comparison CLOSE_P;
-comparison   ::= expression LT expression
-               | expression LE expression
-               | expression EQ expression
-               | expression DIFF expression
-               | expression GE expression
-               | expression GT expression;
+condition  ::= OPEN_P comparison:c CLOSE_P {: RESULT = c; :};
+comparison ::= expression:e1 LT expression:e2 {: RESULT = addComparison(NodeSymbol.LT, e1, e2); :}
+            | expression:e1 LE expression:e2 {: RESULT = addComparison(NodeSymbol.LE, e1, e2); :}
+            | expression:e1 EQ expression:e2 {: RESULT = addComparison(NodeSymbol.EQ, e1, e2); :}
+            | expression:e1 DIFF expression:e2 {: RESULT = addComparison(NodeSymbol.DIFF, e1, e2); :}
+            | expression:e1 GE expression:e2 {: RESULT = addComparison(NodeSymbol.GE, e1, e2); :}
+            | expression:e1 GT expression:e2 {: RESULT = addComparison(NodeSymbol.GT, e1, e2); :};
 
 // While loop
-while_loop ::= WHILE condition block {::};
+while_loop ::= WHILE condition:c block:b {: b.addFirst(c); RESULT = new InnerNode(NodeSymbol.WHILE, 0, b); :};
 
 //--- Instruction -------------------------------------------------------------
 instruction          ::= concrete_instruction:c SEMICOLON {: RESULT = c; :};

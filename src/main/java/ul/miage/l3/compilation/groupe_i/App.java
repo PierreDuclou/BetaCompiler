@@ -3,17 +3,11 @@ package ul.miage.l3.compilation.groupe_i;
 import generated.cuplex.ParserCup;
 import generated.cuplex.Yylex;
 import ul.miage.l3.compilation.groupe_i.ast.AbstractSyntaxTree;
-import ul.miage.l3.compilation.groupe_i.ast.NodeSymbol;
-import ul.miage.l3.compilation.groupe_i.symbols.ContextedSymbol;
-import ul.miage.l3.compilation.groupe_i.symbols.Parameter;
-import ul.miage.l3.compilation.groupe_i.symbols.Symbol;
 import ul.miage.l3.compilation.groupe_i.symbols.SymbolsTable;
 import ul.miage.l3.compilation.groupe_i.utils.Prettifier;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Classe principale

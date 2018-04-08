@@ -286,6 +286,33 @@ class CUP$ParserCup$actions {
         return key;
     }
 
+    /**
+     * Returns a node representing a comparison
+     *
+     * @param symbol logical operator
+     * @param left left member
+     * @param right right member
+     * @return node representing a comparison
+     */
+    private InnerNode addComparison(NodeSymbol symbol, Node left, Node right) {
+        return new InnerNode(symbol, -404, new LinkedList(Arrays.asList(new Node[] { left, right })));
+    }
+
+    private InnerNode addIfStatement(Node comparison, LinkedList<Node> _then) {
+        InnerNode ret = new InnerNode(NodeSymbol.IF, -404);
+        ret.addChild(comparison);
+        ret.addChild(new InnerNode(NodeSymbol.THEN, -404, _then));
+        return ret;
+    }
+
+    private InnerNode addIfStatement(Node comparison, LinkedList<Node> _then, LinkedList<Node> _else) {
+        InnerNode ret = addIfStatement(comparison, _then);
+        ret.addChild(new InnerNode(NodeSymbol.ELSE, -404, _else));
+        return ret;
+    }
+
+    // private InnerNode addExpression(NodeSymbol symbol, Node left, Node right)
+
   private final ParserCup parser;
 
   /** Constructor */
@@ -589,7 +616,13 @@ class CUP$ParserCup$actions {
           case 22: // inner_block ::= inner_block control_flow 
             {
               LinkedList<Node> RESULT =null;
-		 RESULT = new LinkedList(); 
+		int ileft = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-1)).left;
+		int iright = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-1)).right;
+		LinkedList<Node> i = (LinkedList<Node>)((java_cup.runtime.Symbol) CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-1)).value;
+		int cleft = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).left;
+		int cright = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).right;
+		InnerNode c = (InnerNode)((java_cup.runtime.Symbol) CUP$ParserCup$stack.peek()).value;
+		 i.add(c); RESULT = i; 
               CUP$ParserCup$result = parser.getSymbolFactory().newSymbol("inner_block",8, ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-1)), ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), RESULT);
             }
           return CUP$ParserCup$result;
@@ -606,8 +639,11 @@ class CUP$ParserCup$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 24: // control_flow ::= if_statement 
             {
-              Object RESULT =null;
-
+              InnerNode RESULT =null;
+		int ileft = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).left;
+		int iright = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).right;
+		InnerNode i = (InnerNode)((java_cup.runtime.Symbol) CUP$ParserCup$stack.peek()).value;
+		 RESULT = i; 
               CUP$ParserCup$result = parser.getSymbolFactory().newSymbol("control_flow",9, ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), RESULT);
             }
           return CUP$ParserCup$result;
@@ -615,8 +651,11 @@ class CUP$ParserCup$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 25: // control_flow ::= while_loop 
             {
-              Object RESULT =null;
-
+              InnerNode RESULT =null;
+		int wleft = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).left;
+		int wright = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).right;
+		InnerNode w = (InnerNode)((java_cup.runtime.Symbol) CUP$ParserCup$stack.peek()).value;
+		 RESULT = w; 
               CUP$ParserCup$result = parser.getSymbolFactory().newSymbol("control_flow",9, ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), RESULT);
             }
           return CUP$ParserCup$result;
@@ -624,8 +663,14 @@ class CUP$ParserCup$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 26: // if_statement ::= IF condition block 
             {
-              Object RESULT =null;
-
+              InnerNode RESULT =null;
+		int cleft = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-1)).left;
+		int cright = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-1)).right;
+		InnerNode c = (InnerNode)((java_cup.runtime.Symbol) CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-1)).value;
+		int bleft = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).left;
+		int bright = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).right;
+		LinkedList<Node> b = (LinkedList<Node>)((java_cup.runtime.Symbol) CUP$ParserCup$stack.peek()).value;
+		 RESULT = addIfStatement(c, b); 
               CUP$ParserCup$result = parser.getSymbolFactory().newSymbol("if_statement",10, ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)), ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), RESULT);
             }
           return CUP$ParserCup$result;
@@ -633,8 +678,17 @@ class CUP$ParserCup$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 27: // if_statement ::= IF condition block ELSE block 
             {
-              Object RESULT =null;
-
+              InnerNode RESULT =null;
+		int cleft = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-3)).left;
+		int cright = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-3)).right;
+		InnerNode c = (InnerNode)((java_cup.runtime.Symbol) CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-3)).value;
+		int b1left = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).left;
+		int b1right = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).right;
+		LinkedList<Node> b1 = (LinkedList<Node>)((java_cup.runtime.Symbol) CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).value;
+		int b2left = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).left;
+		int b2right = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).right;
+		LinkedList<Node> b2 = (LinkedList<Node>)((java_cup.runtime.Symbol) CUP$ParserCup$stack.peek()).value;
+		 RESULT = addIfStatement(c, b1, b2); 
               CUP$ParserCup$result = parser.getSymbolFactory().newSymbol("if_statement",10, ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-4)), ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), RESULT);
             }
           return CUP$ParserCup$result;
@@ -642,8 +696,11 @@ class CUP$ParserCup$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 28: // condition ::= OPEN_P comparison CLOSE_P 
             {
-              Object RESULT =null;
-
+              InnerNode RESULT =null;
+		int cleft = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-1)).left;
+		int cright = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-1)).right;
+		InnerNode c = (InnerNode)((java_cup.runtime.Symbol) CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-1)).value;
+		 RESULT = c; 
               CUP$ParserCup$result = parser.getSymbolFactory().newSymbol("condition",11, ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)), ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), RESULT);
             }
           return CUP$ParserCup$result;
@@ -651,8 +708,14 @@ class CUP$ParserCup$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 29: // comparison ::= expression LT expression 
             {
-              Object RESULT =null;
-
+              InnerNode RESULT =null;
+		int e1left = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).left;
+		int e1right = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).right;
+		Node e1 = (Node)((java_cup.runtime.Symbol) CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).value;
+		int e2left = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).left;
+		int e2right = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).right;
+		Node e2 = (Node)((java_cup.runtime.Symbol) CUP$ParserCup$stack.peek()).value;
+		 RESULT = addComparison(NodeSymbol.LT, e1, e2); 
               CUP$ParserCup$result = parser.getSymbolFactory().newSymbol("comparison",12, ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)), ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), RESULT);
             }
           return CUP$ParserCup$result;
@@ -660,8 +723,14 @@ class CUP$ParserCup$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 30: // comparison ::= expression LE expression 
             {
-              Object RESULT =null;
-
+              InnerNode RESULT =null;
+		int e1left = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).left;
+		int e1right = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).right;
+		Node e1 = (Node)((java_cup.runtime.Symbol) CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).value;
+		int e2left = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).left;
+		int e2right = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).right;
+		Node e2 = (Node)((java_cup.runtime.Symbol) CUP$ParserCup$stack.peek()).value;
+		 RESULT = addComparison(NodeSymbol.LE, e1, e2); 
               CUP$ParserCup$result = parser.getSymbolFactory().newSymbol("comparison",12, ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)), ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), RESULT);
             }
           return CUP$ParserCup$result;
@@ -669,8 +738,14 @@ class CUP$ParserCup$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 31: // comparison ::= expression EQ expression 
             {
-              Object RESULT =null;
-
+              InnerNode RESULT =null;
+		int e1left = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).left;
+		int e1right = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).right;
+		Node e1 = (Node)((java_cup.runtime.Symbol) CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).value;
+		int e2left = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).left;
+		int e2right = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).right;
+		Node e2 = (Node)((java_cup.runtime.Symbol) CUP$ParserCup$stack.peek()).value;
+		 RESULT = addComparison(NodeSymbol.EQ, e1, e2); 
               CUP$ParserCup$result = parser.getSymbolFactory().newSymbol("comparison",12, ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)), ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), RESULT);
             }
           return CUP$ParserCup$result;
@@ -678,8 +753,14 @@ class CUP$ParserCup$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 32: // comparison ::= expression DIFF expression 
             {
-              Object RESULT =null;
-
+              InnerNode RESULT =null;
+		int e1left = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).left;
+		int e1right = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).right;
+		Node e1 = (Node)((java_cup.runtime.Symbol) CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).value;
+		int e2left = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).left;
+		int e2right = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).right;
+		Node e2 = (Node)((java_cup.runtime.Symbol) CUP$ParserCup$stack.peek()).value;
+		 RESULT = addComparison(NodeSymbol.DIFF, e1, e2); 
               CUP$ParserCup$result = parser.getSymbolFactory().newSymbol("comparison",12, ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)), ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), RESULT);
             }
           return CUP$ParserCup$result;
@@ -687,8 +768,14 @@ class CUP$ParserCup$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 33: // comparison ::= expression GE expression 
             {
-              Object RESULT =null;
-
+              InnerNode RESULT =null;
+		int e1left = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).left;
+		int e1right = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).right;
+		Node e1 = (Node)((java_cup.runtime.Symbol) CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).value;
+		int e2left = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).left;
+		int e2right = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).right;
+		Node e2 = (Node)((java_cup.runtime.Symbol) CUP$ParserCup$stack.peek()).value;
+		 RESULT = addComparison(NodeSymbol.GE, e1, e2); 
               CUP$ParserCup$result = parser.getSymbolFactory().newSymbol("comparison",12, ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)), ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), RESULT);
             }
           return CUP$ParserCup$result;
@@ -696,8 +783,14 @@ class CUP$ParserCup$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 34: // comparison ::= expression GT expression 
             {
-              Object RESULT =null;
-
+              InnerNode RESULT =null;
+		int e1left = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).left;
+		int e1right = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).right;
+		Node e1 = (Node)((java_cup.runtime.Symbol) CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).value;
+		int e2left = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).left;
+		int e2right = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).right;
+		Node e2 = (Node)((java_cup.runtime.Symbol) CUP$ParserCup$stack.peek()).value;
+		 RESULT = addComparison(NodeSymbol.GT, e1, e2); 
               CUP$ParserCup$result = parser.getSymbolFactory().newSymbol("comparison",12, ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)), ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), RESULT);
             }
           return CUP$ParserCup$result;
@@ -705,8 +798,14 @@ class CUP$ParserCup$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 35: // while_loop ::= WHILE condition block 
             {
-              Object RESULT =null;
-		
+              InnerNode RESULT =null;
+		int cleft = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-1)).left;
+		int cright = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-1)).right;
+		InnerNode c = (InnerNode)((java_cup.runtime.Symbol) CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-1)).value;
+		int bleft = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).left;
+		int bright = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).right;
+		LinkedList<Node> b = (LinkedList<Node>)((java_cup.runtime.Symbol) CUP$ParserCup$stack.peek()).value;
+		 b.addFirst(c); RESULT = new InnerNode(NodeSymbol.WHILE, 0, b); 
               CUP$ParserCup$result = parser.getSymbolFactory().newSymbol("while_loop",13, ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)), ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), RESULT);
             }
           return CUP$ParserCup$result;
@@ -785,6 +884,7 @@ class CUP$ParserCup$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).right;
 		Node e = (Node)((java_cup.runtime.Symbol) CUP$ParserCup$stack.peek()).value;
 		
+                        // Resolving key
                         int key;
 
                         if (e instanceof LeafNode) {

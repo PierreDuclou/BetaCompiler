@@ -1,7 +1,11 @@
 int b;
 
 factorielle(int n) -> int {
-    return 1;
+    if (n <= 1) {
+        return 1;
+    }
+
+    return n * factorielle(n-1);
 }
 
 main() -> void {
@@ -12,7 +16,7 @@ main() -> void {
     }
 
     while (b < 10) {
-        b = b + 1;
+        b = 123;
     }
 
     int a = factorielle(b);
