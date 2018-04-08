@@ -79,15 +79,30 @@ action code {:
         return key;
     }
 
-    private InnerNode addIfStatement(Node comparison, LinkedList<Node> _then) {
+    /**
+     * Returns a node that represents an if statement without else clause
+     *
+     * @param condition node that represents the logical expression of the condition
+     * @param _then list of node representing instructions executed if the condition is verified
+     * @return node that represents an if statement
+     */
+    private InnerNode addIfStatement(Node condition, LinkedList<Node> _then) {
         InnerNode ret = new InnerNode(NodeSymbol.IF, -404);
-        ret.addChild(comparison);
+        ret.addChild(condition);
         ret.addChild(new InnerNode(NodeSymbol.THEN, -404, _then));
         return ret;
     }
 
-    private InnerNode addIfStatement(Node comparison, LinkedList<Node> _then, LinkedList<Node> _else) {
-        InnerNode ret = addIfStatement(comparison, _then);
+    /**
+     * Returns a node that represents an if statement with an else clause
+     *
+     * @param condition node that represents the logical expression of the condition
+     * @param _then list of node representing instructions executed if the condition is verified
+     * @param _else list of node representing instructions executed if the condition is not verified
+     * @return node that represents an if statement
+     */
+    private InnerNode addIfStatement(Node condition, LinkedList<Node> _then, LinkedList<Node> _else) {
+        InnerNode ret = addIfStatement(condition, _then);
         ret.addChild(new InnerNode(NodeSymbol.ELSE, -404, _else));
         return ret;
     }
@@ -166,7 +181,7 @@ start with entry;
 
 entry ::= program:p
         {:
-            InnerNode root = new InnerNode(NodeSymbol.PROGRAM, -1);
+            InnerNode root = new InnerNode(NodeSymbol.PROGRAM, -404);
             root.addChild(p);
             tree.setRoot(root);
         :};
@@ -227,7 +242,7 @@ comparison ::= expression:e1 LT expression:e2 {: RESULT = addExpression(NodeSymb
             | expression:e1 GT expression:e2 {: RESULT = addExpression(NodeSymbol.GT, e1, e2); :};
 
 // While loop
-while_loop ::= WHILE condition:c block:b {: b.addFirst(c); RESULT = new InnerNode(NodeSymbol.WHILE, 0, b); :};
+while_loop ::= WHILE condition:c block:b {: b.addFirst(c); RESULT = new InnerNode(NodeSymbol.WHILE, -404, b); :};
 
 //--- Instruction -------------------------------------------------------------
 instruction          ::= concrete_instruction:c SEMICOLON {: RESULT = c; :};

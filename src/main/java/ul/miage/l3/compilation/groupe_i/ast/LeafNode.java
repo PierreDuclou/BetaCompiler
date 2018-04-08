@@ -57,6 +57,11 @@ public class LeafNode extends Node {
         return value;
     }
 
+    /**
+     * String representation of the instance
+     *
+     * @return a string representing the instance
+     */
     @Override
     public String toString() {
         return "LeafNode{" +

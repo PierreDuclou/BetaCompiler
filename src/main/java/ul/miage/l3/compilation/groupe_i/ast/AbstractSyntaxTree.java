@@ -38,6 +38,11 @@ public class AbstractSyntaxTree {
         this.root = root;
     }
 
+    /**
+     * String representation of the instance
+     *
+     * @return a string representing the instance
+     */
     @Override
     public String toString() {
         return "AbstractSyntaxTree{" +

@@ -349,7 +349,7 @@ class CUP$ParserCup$actions {
 		int pright = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).right;
 		LinkedList<Node> p = (LinkedList<Node>)((java_cup.runtime.Symbol) CUP$ParserCup$stack.peek()).value;
 		
-            InnerNode root = new InnerNode(NodeSymbol.PROGRAM, -1);
+            InnerNode root = new InnerNode(NodeSymbol.PROGRAM, -404);
             root.addChild(p);
             tree.setRoot(root);
         
@@ -798,7 +798,7 @@ class CUP$ParserCup$actions {
 		int bleft = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).left;
 		int bright = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).right;
 		LinkedList<Node> b = (LinkedList<Node>)((java_cup.runtime.Symbol) CUP$ParserCup$stack.peek()).value;
-		 b.addFirst(c); RESULT = new InnerNode(NodeSymbol.WHILE, 0, b); 
+		 b.addFirst(c); RESULT = new InnerNode(NodeSymbol.WHILE, -404, b); 
               CUP$ParserCup$result = parser.getSymbolFactory().newSymbol("while_loop",13, ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)), ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), RESULT);
             }
           return CUP$ParserCup$result;
