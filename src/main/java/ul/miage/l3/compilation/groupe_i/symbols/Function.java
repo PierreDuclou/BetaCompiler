@@ -85,7 +85,7 @@ public class Function extends Symbol {
      */
     @Override
     public String toString() {
-        return "Function{" +
+        return "FunctionDefinition{" +
                 "numberOfParameters=" + numberOfParameters +
                 ", numberOfLocalVariables=" + numberOfLocalVariables +
                 ", id='" + id + '\'' +

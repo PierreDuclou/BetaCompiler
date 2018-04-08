@@ -40,6 +40,7 @@ action code {:
     Integer context = null;
     SymbolsTable table = SymbolsTable.getInstance();
     AbstractSyntaxTree tree = AbstractSyntaxTree.getInstance();
+    int lineNumber = 0;
 
     /**
      * Determine if a variable is global or local, then add it into the symbols table
@@ -88,9 +89,9 @@ action code {:
      * @return node that represents an if statement
      */
     private InnerNode createIfNode(Node condition, LinkedList<Node> _then) {
-        InnerNode ret = new InnerNode(NodeSymbol.IF, -404);
+        InnerNode ret = new InnerNode(NodeSymbol.IF, -999);
         ret.addChild(condition);
-        ret.addChild(new InnerNode(NodeSymbol.THEN, -404, _then));
+        ret.addChild(new InnerNode(NodeSymbol.THEN, -999, _then));
         return ret;
     }
 
@@ -104,7 +105,7 @@ action code {:
      */
     private InnerNode createIfNode(Node condition, LinkedList<Node> _then, LinkedList<Node> _else) {
         InnerNode ret = createIfNode(condition, _then);
-        ret.addChild(new InnerNode(NodeSymbol.ELSE, -404, _else));
+        ret.addChild(new InnerNode(NodeSymbol.ELSE, -999, _else));
         return ret;
     }
 
@@ -117,7 +118,7 @@ action code {:
      * @return node representing a comparison
      */
     private InnerNode createExpressionNode(NodeSymbol symbol, Node left, Node right) {
-        return new InnerNode(symbol, -404, new LinkedList(Arrays.asList(new Node[] { left, right })));        
+        return new InnerNode(symbol, -999, new LinkedList(Arrays.asList(new Node[] { left, right })));        
     }
 :};
 
@@ -185,7 +186,7 @@ start with entry;
 
 entry ::= program:p
         {:
-            InnerNode root = new InnerNode(NodeSymbol.PROGRAM, -404);
+            InnerNode root = new InnerNode(NodeSymbol.PROGRAM, -999);
             root.addChild(p);
             tree.setRoot(root);
         :};
@@ -210,9 +211,9 @@ func_type       ::= INT:i {: RESULT = i; :} | VOID:v {: RESULT = v; :};
 parameters      ::= parameters COMMA var_declaration
                   | var_declaration
                   | ;
-func_call       ::= ID:id OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.CALL, -404, a); :}
-                  | READ OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.READ, -404, a); :}
-                  | WRITE OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.WRITE, -404, a); :};
+func_call       ::= ID:id OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.CALL, -999, a); :}
+                  | READ OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.READ, -999, a); :}
+                  | WRITE OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.WRITE, -999, a); :};
 
 arguments       ::= arguments:a COMMA expression:ex {: a.add(ex); :}
                   | expression:e {: RESULT = new LinkedList(Arrays.asList(new Node[] {e})); :}
@@ -249,7 +250,7 @@ comparison ::= expression:e1 LT expression:e2 {: RESULT = createExpressionNode(N
             | expression:e1 GT expression:e2 {: RESULT = createExpressionNode(NodeSymbol.GT, e1, e2); :};
 
 // While loop
-while_loop ::= WHILE condition:c block:b {: b.addFirst(c); RESULT = new InnerNode(NodeSymbol.WHILE, -404, b); :};
+while_loop ::= WHILE condition:c block:b {: b.addFirst(c); RESULT = new InnerNode(NodeSymbol.WHILE, -999, b); :};
 
 //--- Instruction -------------------------------------------------------------
 instruction          ::= concrete_instruction:c SEMICOLON {: RESULT = c; :};
@@ -298,7 +299,7 @@ var_assignation  ::= ID:id ASSIGN expression:e
 // Return statement
 return_statement ::= RETURN expression:e 
                     {:
-                        InnerNode tmp = new InnerNode(NodeSymbol.RETURN, -404);
+                        InnerNode tmp = new InnerNode(NodeSymbol.RETURN, -999);
                         tmp.addChild(e);
                         RESULT = tmp;
                     :};
@@ -312,5 +313,5 @@ term       ::= factor:f MUL term:t {: RESULT = createExpressionNode(NodeSymbol.M
              | factor:f {: RESULT = f; :};
 factor     ::= OPEN_P expression:e CLOSE_P {: RESULT = e; :}
              | func_call:f {: RESULT = f; :}
-             | VALUE:v {: RESULT = new LeafNode(NodeSymbol.CONST, -404, v.toString()); :}
+             | VALUE:v {: RESULT = new LeafNode(NodeSymbol.CONST, -999, v.toString()); :}
              | ID:id {: RESULT = new LeafNode(NodeSymbol.VARIABLE, table.getClosestVariableKey(id.toString(), context)); :};

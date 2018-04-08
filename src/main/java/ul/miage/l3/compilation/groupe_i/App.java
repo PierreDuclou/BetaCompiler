@@ -4,6 +4,7 @@ import generated.cuplex.ParserCup;
 import generated.cuplex.Yylex;
 import ul.miage.l3.compilation.groupe_i.ast.AbstractSyntaxTree;
 import ul.miage.l3.compilation.groupe_i.symbols.SymbolsTable;
+import ul.miage.l3.compilation.groupe_i.symbols.expections.UndeclaredSymbolException;
 import ul.miage.l3.compilation.groupe_i.utils.Prettifier;
 
 import java.io.FileNotFoundException;
@@ -27,7 +28,7 @@ public class App
      *
      * @param args command line arguments
      */
-    public static void main( String[] args ) {
+    public static void main( String[] args ) throws UndeclaredSymbolException {
         try {
             ParserCup pc = new ParserCup(new Yylex(new FileReader("src/main/resources/example")));
             pc.parse();

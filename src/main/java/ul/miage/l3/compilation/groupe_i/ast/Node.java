@@ -15,7 +15,7 @@ public abstract class Node {
     /**
      * Associated symbol (see enum NodeSymbol)
      */
-    NodeSymbol NODE_SYMBOL;
+    protected NodeSymbol NODE_SYMBOL;
 
     /**
      * Key that links the node to the symbols table
@@ -40,5 +40,21 @@ public abstract class Node {
     public Node(NodeSymbol NODE_SYMBOL, int symbolsTableKey) {
         this.NODE_SYMBOL = NODE_SYMBOL;
         this.symbolsTableKey = symbolsTableKey;
+    }
+
+    /**
+     * Getter : NODE_SYMBOL
+     * @return NODE_SYMBOL
+     */
+    public NodeSymbol getNodeSymbol() {
+        return NODE_SYMBOL;
+    }
+
+    /**
+     * Getter : symbolsTableKey
+     * @return symbolsTableKey
+     */
+    public int getSymbolsTableKey() {
+        return symbolsTableKey;
     }
 }

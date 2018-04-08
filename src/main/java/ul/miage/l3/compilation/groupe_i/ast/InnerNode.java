@@ -18,7 +18,7 @@ public class InnerNode extends Node {
     /**
      * Children of the node
      */
-    LinkedList<Node> children = new LinkedList();
+    private LinkedList<Node> children = new LinkedList();
 
     /**
      * Constructor
@@ -49,6 +49,15 @@ public class InnerNode extends Node {
     public InnerNode(NodeSymbol NODE_SYMBOL, int symbolsTableKey, LinkedList<Node> children) {
         super(NODE_SYMBOL, symbolsTableKey);
         this.children = children;
+    }
+
+    /**
+     * Getter : children
+     *
+     * @return children
+     */
+    public LinkedList<Node> getChildren() {
+        return children;
     }
 
     /**

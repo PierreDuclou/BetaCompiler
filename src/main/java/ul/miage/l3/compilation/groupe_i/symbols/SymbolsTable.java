@@ -1,5 +1,7 @@
 package ul.miage.l3.compilation.groupe_i.symbols;
 
+import ul.miage.l3.compilation.groupe_i.symbols.expections.UndeclaredSymbolException;
+
 import java.util.HashMap;
 
 
@@ -74,7 +76,7 @@ public class SymbolsTable {
      * @param context current context
      * @return key of the variable
      */
-    public int getClosestVariableKey(String id, int context) {
+    public int getClosestVariableKey(String id, int context) throws UndeclaredSymbolException {
         int ret = -999;
 
         for (int i: symbols.keySet()) {
@@ -97,6 +99,10 @@ public class SymbolsTable {
                     ret = i;
             }
 
+        }
+
+        if (ret < 0) {
+            throw new UndeclaredSymbolException("Cannot resolve symbol : \"" + id + '\"');
         }
 
         return ret;

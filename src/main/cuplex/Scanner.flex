@@ -24,6 +24,7 @@ import java_cup.runtime.Symbol;
 %public
 %cupsym Sym
 %cup
+%line
 
 //--- Macros ------------------------------------------------------------------
 
@@ -75,9 +76,11 @@ Value = [0-9]+
 "write"       { return new Symbol(Sym.WRITE); }
 
 // Custom tokens
-{Identifier}    { return new Symbol(Sym.ID, yytext()); }
+{Identifier}  { return new Symbol(Sym.ID, yytext()); }
 {Value}       { return new Symbol(Sym.VALUE, yytext()); }
 
 // Ignored tokens
 {Comment}     {}
 {Whitespaces} {}
+
+[^]           { throw new Error("Illegal character \""+yytext()+"\" at line "+ ((int) yyline+1));  }
