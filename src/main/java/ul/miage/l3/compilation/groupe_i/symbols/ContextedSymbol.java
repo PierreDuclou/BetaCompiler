@@ -1,15 +1,15 @@
 package ul.miage.l3.compilation.groupe_i.symbols;
 
-abstract class ContextedSymbol extends Symbol {
+public abstract class ContextedSymbol extends Symbol {
     /**
      * The index of the variable in the stack
      */
-    int rank;
+    protected int rank;
 
     /**
      * Refers to the related function's key in the symbol table
      */
-    int context;
+    protected int context;
 
     /**
      * Constructor
@@ -23,5 +23,22 @@ abstract class ContextedSymbol extends Symbol {
         super(id, type);
         this.rank = rank;
         this.context = context;
+    }
+
+    /**
+     * Getter : rank
+     *
+     * @return rank
+     */
+    public int getRank() {
+        return rank;
+    }
+
+    /**
+     * Getter : context
+     * @return context
+     */
+    public int getContext() {
+        return context;
     }
 }

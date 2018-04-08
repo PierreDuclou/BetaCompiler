@@ -17,4 +17,6 @@ main() -> void {
 
     int a = factorielle(b);
     int c = 45;
+    int d = c;
+    a = d;
 }

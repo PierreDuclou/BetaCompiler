@@ -4,7 +4,7 @@ public class AbstractSyntaxTree {
     /**
      * Root node of the tree
      */
-    private Node root;
+    private InnerNode root;
 
     /**
      * Singleton's instance
@@ -16,7 +16,7 @@ public class AbstractSyntaxTree {
      *
      * @return root
      */
-    public Node getRoot() {
+    public InnerNode getRoot() {
         return root;
     }
 
@@ -34,7 +34,14 @@ public class AbstractSyntaxTree {
      *
      * @param root new root
      */
-    public void setRoot(Node root) {
+    public void setRoot(InnerNode root) {
         this.root = root;
+    }
+
+    @Override
+    public String toString() {
+        return "AbstractSyntaxTree{" +
+                "root=" + root +
+                '}';
     }
 }

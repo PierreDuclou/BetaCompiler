@@ -1,15 +1,15 @@
 package ul.miage.l3.compilation.groupe_i.symbols;
 
-abstract class Symbol {
+public abstract class Symbol {
     /**
      * Identifier of the symbol
      */
-    String id;
+    protected String id;
 
     /**
      * Type of the symbol
      */
-    String type;
+    protected String type;
 
     /**
      * Constructor

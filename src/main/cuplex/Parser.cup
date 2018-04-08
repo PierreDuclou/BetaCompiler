@@ -24,6 +24,8 @@ package generated.cuplex;
 
 import ul.miage.l3.compilation.groupe_i.symbols.*;
 import ul.miage.l3.compilation.groupe_i.ast.*;
+import java.util.LinkedList;
+import java.util.Arrays;
 
 
 /*
@@ -36,7 +38,6 @@ import ul.miage.l3.compilation.groupe_i.ast.*;
 
 action code {:
     Integer context = null;
-    Node currentNode = null;
     boolean isParameter;
     SymbolsTable table = SymbolsTable.getInstance();
     AbstractSyntaxTree tree = AbstractSyntaxTree.getInstance();
@@ -105,25 +106,25 @@ terminal ID, VALUE;
 
 // Non terminals
 non terminal entry;
-non terminal program;
-non terminal func_definition;
+non terminal LinkedList<Node> program;
+non terminal InnerNode func_definition;
 non terminal func_type;
 non terminal parameters;
-non terminal func_call;
-non terminal arguments;
-non terminal block;
-non terminal inner_block;
+non terminal InnerNode func_call;
+non terminal LinkedList<Node> arguments;
+non terminal LinkedList<Node> block;
+non terminal LinkedList<Node> inner_block;
 non terminal control_flow;
 non terminal if_statement;
 non terminal condition;
 non terminal comparison;
 non terminal while_loop;
-non terminal instruction;
-non terminal concrete_instruction;
+non terminal InnerNode instruction;
+non terminal InnerNode concrete_instruction;
 non terminal Node expression;
 non terminal Node term;
 non terminal Node factor;
-non terminal return_statement;
+non terminal InnerNode return_statement;
 non terminal InnerNode var_declaration;
 non terminal InnerNode var_assignation;
 
@@ -138,22 +139,26 @@ non terminal InnerNode var_assignation;
 
 start with entry;
 
-entry ::= program;
+entry ::= program:p
+        {:
+            InnerNode root = new InnerNode(NodeSymbol.PROGRAM, -1);
+            root.addChild(p);
+            tree.setRoot(root);
+        :};
 
-program ::= program var_declaration SEMICOLON
-          | var_declaration SEMICOLON
-          | program var_assignation SEMICOLON
-          | var_assignation SEMICOLON
-          | program func_definition
-          | func_definition;
-
+program ::= program var_declaration SEMICOLON {: RESULT = new LinkedList(); :}
+          | program var_assignation SEMICOLON {: RESULT = new LinkedList(); :}
+          | program:p func_definition:f {: p.add(f); RESULT = p; :}
+          | {: RESULT = new LinkedList(); :};
+          
 //--- Function ----------------------------------------------------------------
 func_definition ::= ID:id {: context = table.add(new Function((String) id)); :}
                     OPEN_P {: isParameter = true; :} parameters {: isParameter = false; :} 
-                    CLOSE_P ARROW func_type:t block
+                    CLOSE_P ARROW func_type:t block:b
                     {:
                         Function f = (Function) table.get(context);
                         f.setType((String) t);
+                        RESULT = new InnerNode(NodeSymbol.FUNCTION, context, b);
                         context = null;
                     :};
 
@@ -161,23 +166,28 @@ func_type       ::= INT:i {: RESULT = i; :} | VOID:v {: RESULT = v; :};
 parameters      ::= parameters COMMA var_declaration
                   | var_declaration
                   | ;
-func_call       ::= ID OPEN_P arguments CLOSE_P;
-arguments       ::= arguments COMMA expression
-                  | expression
-                  | ;
+func_call       ::= ID:id OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.CALL, -3, a); :};
+arguments       ::= arguments:a COMMA expression:ex {: a.add(ex); :}
+                  | expression:e {: RESULT = new LinkedList(Arrays.asList(new Node[] {e})); :}
+                  | {: RESULT = new LinkedList(); :};
 
 //--- Block -------------------------------------------------------------------
 block       ::= OPEN_B block inner_block CLOSE_B
-              | OPEN_B inner_block CLOSE_B
-              | OPEN_B CLOSE_B;
-inner_block ::= inner_block instruction
-              | instruction
-              | inner_block control_flow
-              | control_flow;
+              | OPEN_B inner_block:i CLOSE_B {: RESULT = i; :};
+inner_block ::= inner_block:in instruction:i
+                {:
+                    if (in != null) {
+                        in.add(i);
+                        RESULT = in;
+                    } else {
+                        RESULT = new LinkedList();
+                    }
+                :}
+              | inner_block control_flow {: RESULT = new LinkedList(); :}
+              | {: RESULT = new LinkedList(); :};
 
 //--- Control flow ------------------------------------------------------------
-control_flow ::= if_statement
-               | while_loop;
+control_flow ::= if_statement | while_loop;
 
 // IF statement
 if_statement ::= IF condition block
@@ -192,20 +202,27 @@ comparison   ::= expression LT expression
                | expression GT expression;
 
 // While loop
-while_loop ::= WHILE condition block;
+while_loop ::= WHILE condition block {::};
 
 //--- Instruction -------------------------------------------------------------
-instruction          ::= concrete_instruction SEMICOLON;
-concrete_instruction ::= var_declaration
-                       | var_assignation
-                       | return_statement
-                       | func_call
-                       | ;
+instruction          ::= concrete_instruction:c SEMICOLON {: RESULT = c; :};
+concrete_instruction ::= var_declaration:vd {: RESULT = vd; :}
+                       | var_assignation:va {: RESULT = va; :}
+                       | return_statement:r {: RESULT = r; :}
+                       | func_call:f {: RESULT = f; :};
 
+// Variable declaration
 var_declaration ::= INT:t ID:id ASSIGN expression:e
                     {:
-                        LeafNode tmp = (LeafNode) e;
-                        int key = addVariable(id.toString(), t.toString(), e instanceof LeafNode ? tmp.getValue() : 0);
+                        // Resolving key
+                        int key;
+
+                        if (e instanceof LeafNode) {
+                            LeafNode tmp = (LeafNode) e;
+                            key = addVariable(id.toString(), t.toString(), tmp.getValue());
+                        } else {
+                            key = addVariable(id.toString(), t.toString(), 0);
+                        }
 
                         // If the variable is local
                         if (context != null) {
@@ -213,18 +230,31 @@ var_declaration ::= INT:t ID:id ASSIGN expression:e
                             LeafNode left = new LeafNode(NodeSymbol.VARIABLE, key);
                             RESULT.addChild(left);
                             RESULT.addChild(e);
-                        } else {
-                            RESULT = null;
                         }
                     :}
-                  | INT:t ID:id 
+                  | INT:t ID:id
                     {:
-                        if (isParameter)
+                        if (context != null)
                             addParameter(id.toString(), t.toString());
+                        else
+                            addVariable(id.toString(), t.toString(), 0);
                     :};
 
-var_assignation  ::= ID ASSIGN expression;
-return_statement ::= RETURN expression;
+// Variable assignation
+var_assignation  ::= ID:id ASSIGN expression:e
+                    {:
+                        RESULT = new InnerNode(NodeSymbol.ASSIGN);
+                        RESULT.addChild(new LeafNode(NodeSymbol.VARIABLE, table.getClosestVariableKey(id.toString(), context)));
+                        RESULT.addChild(e);
+                    :};
+
+// Return statement
+return_statement ::= RETURN expression:e 
+                    {:
+                        InnerNode tmp = new InnerNode(NodeSymbol.RETURN, -4);
+                        tmp.addChild(e);
+                        RESULT = tmp;
+                    :};
 
 // Expression
 expression ::= term ADD expression
@@ -235,6 +265,6 @@ term       ::= factor MUL term
              | factor MOD term
              | factor:f {: RESULT = f; :};
 factor     ::= OPEN_P expression CLOSE_P
-             | func_call
-             | VALUE:v {: RESULT = new LeafNode(NodeSymbol.CONST, v.toString()); :}
-             | ID:id {: RESULT = new LeafNode(NodeSymbol.VARIABLE); :};
+             | func_call:f {: RESULT = f; :}
+             | VALUE:v {: RESULT = new LeafNode(NodeSymbol.CONST, -2, v.toString()); :}
+             | ID:id {: RESULT = new LeafNode(NodeSymbol.VARIABLE, table.getClosestVariableKey(id.toString(), context)); :};

@@ -2,7 +2,11 @@ package ul.miage.l3.compilation.groupe_i;
 
 import generated.cuplex.ParserCup;
 import generated.cuplex.Yylex;
+import ul.miage.l3.compilation.groupe_i.ast.AbstractSyntaxTree;
 import ul.miage.l3.compilation.groupe_i.ast.NodeSymbol;
+import ul.miage.l3.compilation.groupe_i.symbols.ContextedSymbol;
+import ul.miage.l3.compilation.groupe_i.symbols.Parameter;
+import ul.miage.l3.compilation.groupe_i.symbols.Symbol;
 import ul.miage.l3.compilation.groupe_i.symbols.SymbolsTable;
 import ul.miage.l3.compilation.groupe_i.utils.Prettifier;
 
@@ -31,6 +35,7 @@ public class App
             pc.parse();
             System.out.println("File parsed successfully.");
             System.out.println(Prettifier.prettify(SymbolsTable.getInstance().toString()));
+            System.out.println(Prettifier.prettify(AbstractSyntaxTree.getInstance().toString()));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (Exception e) {

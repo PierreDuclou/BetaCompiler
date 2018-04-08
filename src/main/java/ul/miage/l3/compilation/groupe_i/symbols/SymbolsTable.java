@@ -56,6 +56,41 @@ public class SymbolsTable {
     }
 
     /**
+     * Returns the closest variable key in the table using the given id and context
+     *
+     * @param id id of the variable
+     * @param context current context
+     * @return key of the variable
+     */
+    public int getClosestVariableKey(String id, int context) {
+        int ret = -999;
+
+        for (int i: symbols.keySet()) {
+            if (symbols.get(i) instanceof Parameter) {
+                Parameter tmp = (Parameter) symbols.get(i);
+
+                if(tmp.getId().equals(id) && tmp.getContext() == context)
+                    ret = i;
+
+            } else if (symbols.get(i) instanceof LocalVariable) {
+                LocalVariable tmp = (LocalVariable) symbols.get(i);
+
+                if(tmp.getId().equals(id) && tmp.getContext() == context)
+                    ret = i;
+
+            } else {
+                Symbol tmp = symbols.get(i);
+
+                if (tmp.getId().equals(id))
+                    ret = i;
+            }
+
+        }
+
+        return ret;
+    }
+
+    /**
      * Returns a string representing the instance
      *
      * @return string representing the instance
