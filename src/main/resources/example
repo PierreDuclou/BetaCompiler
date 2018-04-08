@@ -1,5 +1,13 @@
 int b;
 
+factorielle(int n) -> int {
+    if (n <= 1) {
+        return 1;
+    }
+
+    return n * factorielle(n-1);
+}
+
 main() -> void {
     b = 11 + (12 * 5);
 
@@ -15,4 +23,6 @@ main() -> void {
     int c = 45;
     int d = c;
     a = d;
+    write(a);
+    int k = read();
 }

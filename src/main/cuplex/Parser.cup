@@ -38,16 +38,16 @@ import java.util.Arrays;
 
 action code {:
     Integer context = null;
-    boolean isParameter;
     SymbolsTable table = SymbolsTable.getInstance();
     AbstractSyntaxTree tree = AbstractSyntaxTree.getInstance();
 
     /**
-     * Determine if a variable is global or local, then add it into the symbol table
+     * Determine if a variable is global or local, then add it into the symbols table
      *
      * @param id id of the variable
      * @param type type of the variable
      * @param value value of the variable
+     * @return key of the added variable in the symbols table
      */
     private int addVariable(String id, String type, int value) {
         int key;
@@ -65,10 +65,11 @@ action code {:
     }
 
     /**
-     * Add a parameter into the symbol table
+     * Add a parameter into the symbols table
      *
      * @param id id of the variable
      * @param type type of the variable
+     * @return key of the added parameter in the symbols table
      */
     private int addParameter(String id, String type) {
         Function f = (Function) table.get(context);
@@ -86,7 +87,7 @@ action code {:
      * @param _then list of node representing instructions executed if the condition is verified
      * @return node that represents an if statement
      */
-    private InnerNode addIfStatement(Node condition, LinkedList<Node> _then) {
+    private InnerNode createIfNode(Node condition, LinkedList<Node> _then) {
         InnerNode ret = new InnerNode(NodeSymbol.IF, -404);
         ret.addChild(condition);
         ret.addChild(new InnerNode(NodeSymbol.THEN, -404, _then));
@@ -101,8 +102,8 @@ action code {:
      * @param _else list of node representing instructions executed if the condition is not verified
      * @return node that represents an if statement
      */
-    private InnerNode addIfStatement(Node condition, LinkedList<Node> _then, LinkedList<Node> _else) {
-        InnerNode ret = addIfStatement(condition, _then);
+    private InnerNode createIfNode(Node condition, LinkedList<Node> _then, LinkedList<Node> _else) {
+        InnerNode ret = createIfNode(condition, _then);
         ret.addChild(new InnerNode(NodeSymbol.ELSE, -404, _else));
         return ret;
     }
@@ -115,7 +116,7 @@ action code {:
      * @param right right member
      * @return node representing a comparison
      */
-    private InnerNode addExpression(NodeSymbol symbol, Node left, Node right) {
+    private InnerNode createExpressionNode(NodeSymbol symbol, Node left, Node right) {
         return new InnerNode(symbol, -404, new LinkedList(Arrays.asList(new Node[] { left, right })));        
     }
 :};
@@ -140,6 +141,9 @@ terminal ADD, SUB, DIV, MUL, ASSIGN, LT, GT, GE, LE, EQ, DIFF;
 
 // Wrappers
 terminal OPEN_P, CLOSE_P, OPEN_B, CLOSE_B;
+
+// Built-in function
+terminal READ, WRITE;
 
 // Custom tokens
 terminal ID, VALUE;
@@ -193,7 +197,7 @@ program ::= program var_declaration SEMICOLON {: RESULT = new LinkedList(); :}
           
 //--- Function ----------------------------------------------------------------
 func_definition ::= ID:id {: context = table.add(new Function((String) id)); :}
-                    OPEN_P {: isParameter = true; :} parameters {: isParameter = false; :} 
+                    OPEN_P parameters
                     CLOSE_P ARROW func_type:t block:b
                     {:
                         Function f = (Function) table.get(context);
@@ -206,7 +210,10 @@ func_type       ::= INT:i {: RESULT = i; :} | VOID:v {: RESULT = v; :};
 parameters      ::= parameters COMMA var_declaration
                   | var_declaration
                   | ;
-func_call       ::= ID:id OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.CALL, -404, a); :};
+func_call       ::= ID:id OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.CALL, -404, a); :}
+                  | READ OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.READ, -404, a); :}
+                  | WRITE OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.WRITE, -404, a); :};
+
 arguments       ::= arguments:a COMMA expression:ex {: a.add(ex); :}
                   | expression:e {: RESULT = new LinkedList(Arrays.asList(new Node[] {e})); :}
                   | {: RESULT = new LinkedList(); :};
@@ -230,16 +237,16 @@ inner_block ::= inner_block:in instruction:i
 control_flow ::= if_statement:i {: RESULT = i; :} | while_loop:w {: RESULT = w; :};
 
 // IF statement
-if_statement ::= IF condition:c block:b {: RESULT = addIfStatement(c, b); :}
-               | IF condition:c block:b1 ELSE block:b2 {: RESULT = addIfStatement(c, b1, b2); :};
+if_statement ::= IF condition:c block:b {: RESULT = createIfNode(c, b); :}
+               | IF condition:c block:b1 ELSE block:b2 {: RESULT = createIfNode(c, b1, b2); :};
 
 condition  ::= OPEN_P comparison:c CLOSE_P {: RESULT = c; :};
-comparison ::= expression:e1 LT expression:e2 {: RESULT = addExpression(NodeSymbol.LT, e1, e2); :}
-            | expression:e1 LE expression:e2 {: RESULT = addExpression(NodeSymbol.LE, e1, e2); :}
-            | expression:e1 EQ expression:e2 {: RESULT = addExpression(NodeSymbol.EQ, e1, e2); :}
-            | expression:e1 DIFF expression:e2 {: RESULT = addExpression(NodeSymbol.DIFF, e1, e2); :}
-            | expression:e1 GE expression:e2 {: RESULT = addExpression(NodeSymbol.GE, e1, e2); :}
-            | expression:e1 GT expression:e2 {: RESULT = addExpression(NodeSymbol.GT, e1, e2); :};
+comparison ::= expression:e1 LT expression:e2 {: RESULT = createExpressionNode(NodeSymbol.LT, e1, e2); :}
+            | expression:e1 LE expression:e2 {: RESULT = createExpressionNode(NodeSymbol.LE, e1, e2); :}
+            | expression:e1 EQ expression:e2 {: RESULT = createExpressionNode(NodeSymbol.EQ, e1, e2); :}
+            | expression:e1 DIFF expression:e2 {: RESULT = createExpressionNode(NodeSymbol.DIFF, e1, e2); :}
+            | expression:e1 GE expression:e2 {: RESULT = createExpressionNode(NodeSymbol.GE, e1, e2); :}
+            | expression:e1 GT expression:e2 {: RESULT = createExpressionNode(NodeSymbol.GT, e1, e2); :};
 
 // While loop
 while_loop ::= WHILE condition:c block:b {: b.addFirst(c); RESULT = new InnerNode(NodeSymbol.WHILE, -404, b); :};
@@ -297,11 +304,11 @@ return_statement ::= RETURN expression:e
                     :};
 
 // Expression
-expression ::= term:t ADD expression:e {: RESULT = addExpression(NodeSymbol.ADD, t, e); :}
-             | term:t SUB expression:e {: RESULT = addExpression(NodeSymbol.SUB, t, e); :}
+expression ::= term:t ADD expression:e {: RESULT = createExpressionNode(NodeSymbol.ADD, t, e); :}
+             | term:t SUB expression:e {: RESULT = createExpressionNode(NodeSymbol.SUB, t, e); :}
              | term:t {: RESULT = t; :};
-term       ::= factor:f MUL term:t {: RESULT = addExpression(NodeSymbol.MUL, f, t); :}
-             | factor:f DIV term:t {: RESULT = addExpression(NodeSymbol.DIV, f, t); :}
+term       ::= factor:f MUL term:t {: RESULT = createExpressionNode(NodeSymbol.MUL, f, t); :}
+             | factor:f DIV term:t {: RESULT = createExpressionNode(NodeSymbol.DIV, f, t); :}
              | factor:f {: RESULT = f; :};
 factor     ::= OPEN_P expression:e CLOSE_P {: RESULT = e; :}
              | func_call:f {: RESULT = f; :}

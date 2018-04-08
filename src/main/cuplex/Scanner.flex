@@ -70,6 +70,10 @@ Value = [0-9]+
 "{"           { return new Symbol(Sym.OPEN_B); }
 "}"           { return new Symbol(Sym.CLOSE_B); }
 
+// Built-in function
+"read"        { return new Symbol(Sym.READ); }
+"write"       { return new Symbol(Sym.WRITE); }
+
 // Custom tokens
 {Identifier}    { return new Symbol(Sym.ID, yytext()); }
 {Value}       { return new Symbol(Sym.VALUE, yytext()); }

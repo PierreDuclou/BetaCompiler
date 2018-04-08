@@ -8,18 +8,20 @@ package generated.cuplex;
 /** CUP generated interface containing symbol constants. */
 public interface Sym {
   /* terminals */
+  public static final int READ = 26;
   public static final int LT = 16;
   public static final int SEMICOLON = 8;
   public static final int ELSE = 6;
   public static final int INT = 2;
   public static final int WHILE = 7;
-  public static final int VALUE = 27;
+  public static final int VALUE = 29;
   public static final int OPEN_B = 24;
   public static final int CLOSE_P = 23;
   public static final int RETURN = 4;
   public static final int IF = 5;
   public static final int GT = 17;
-  public static final int ID = 26;
+  public static final int ID = 28;
+  public static final int WRITE = 27;
   public static final int LE = 19;
   public static final int SUB = 12;
   public static final int COMMA = 9;
@@ -63,6 +65,8 @@ public interface Sym {
   "CLOSE_P",
   "OPEN_B",
   "CLOSE_B",
+  "READ",
+  "WRITE",
   "ID",
   "VALUE"
   };
