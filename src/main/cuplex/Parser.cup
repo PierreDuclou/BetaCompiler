@@ -79,18 +79,6 @@ action code {:
         return key;
     }
 
-    /**
-     * Returns a node representing a comparison
-     *
-     * @param symbol logical operator
-     * @param left left member
-     * @param right right member
-     * @return node representing a comparison
-     */
-    private InnerNode addComparison(NodeSymbol symbol, Node left, Node right) {
-        return new InnerNode(symbol, -404, new LinkedList(Arrays.asList(new Node[] { left, right })));
-    }
-
     private InnerNode addIfStatement(Node comparison, LinkedList<Node> _then) {
         InnerNode ret = new InnerNode(NodeSymbol.IF, -404);
         ret.addChild(comparison);
@@ -104,7 +92,17 @@ action code {:
         return ret;
     }
 
-    // private InnerNode addExpression(NodeSymbol symbol, Node left, Node right)
+    /**
+     * Returns a node representing an expression (can be logical or arithmetical)
+     *
+     * @param symbol operator
+     * @param left left member
+     * @param right right member
+     * @return node representing a comparison
+     */
+    private InnerNode addExpression(NodeSymbol symbol, Node left, Node right) {
+        return new InnerNode(symbol, -404, new LinkedList(Arrays.asList(new Node[] { left, right })));        
+    }
 :};
 
 
@@ -123,7 +121,7 @@ terminal INT, VOID, RETURN, IF, ELSE, WHILE;
 terminal SEMICOLON, COMMA, ARROW;
 
 // Operators
-terminal ADD, SUB, DIV, MUL, MOD, ASSIGN, LT, GT, GE, LE, EQ, DIFF;
+terminal ADD, SUB, DIV, MUL, ASSIGN, LT, GT, GE, LE, EQ, DIFF;
 
 // Wrappers
 terminal OPEN_P, CLOSE_P, OPEN_B, CLOSE_B;
@@ -193,7 +191,7 @@ func_type       ::= INT:i {: RESULT = i; :} | VOID:v {: RESULT = v; :};
 parameters      ::= parameters COMMA var_declaration
                   | var_declaration
                   | ;
-func_call       ::= ID:id OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.CALL, -3, a); :};
+func_call       ::= ID:id OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.CALL, -404, a); :};
 arguments       ::= arguments:a COMMA expression:ex {: a.add(ex); :}
                   | expression:e {: RESULT = new LinkedList(Arrays.asList(new Node[] {e})); :}
                   | {: RESULT = new LinkedList(); :};
@@ -221,12 +219,12 @@ if_statement ::= IF condition:c block:b {: RESULT = addIfStatement(c, b); :}
                | IF condition:c block:b1 ELSE block:b2 {: RESULT = addIfStatement(c, b1, b2); :};
 
 condition  ::= OPEN_P comparison:c CLOSE_P {: RESULT = c; :};
-comparison ::= expression:e1 LT expression:e2 {: RESULT = addComparison(NodeSymbol.LT, e1, e2); :}
-            | expression:e1 LE expression:e2 {: RESULT = addComparison(NodeSymbol.LE, e1, e2); :}
-            | expression:e1 EQ expression:e2 {: RESULT = addComparison(NodeSymbol.EQ, e1, e2); :}
-            | expression:e1 DIFF expression:e2 {: RESULT = addComparison(NodeSymbol.DIFF, e1, e2); :}
-            | expression:e1 GE expression:e2 {: RESULT = addComparison(NodeSymbol.GE, e1, e2); :}
-            | expression:e1 GT expression:e2 {: RESULT = addComparison(NodeSymbol.GT, e1, e2); :};
+comparison ::= expression:e1 LT expression:e2 {: RESULT = addExpression(NodeSymbol.LT, e1, e2); :}
+            | expression:e1 LE expression:e2 {: RESULT = addExpression(NodeSymbol.LE, e1, e2); :}
+            | expression:e1 EQ expression:e2 {: RESULT = addExpression(NodeSymbol.EQ, e1, e2); :}
+            | expression:e1 DIFF expression:e2 {: RESULT = addExpression(NodeSymbol.DIFF, e1, e2); :}
+            | expression:e1 GE expression:e2 {: RESULT = addExpression(NodeSymbol.GE, e1, e2); :}
+            | expression:e1 GT expression:e2 {: RESULT = addExpression(NodeSymbol.GT, e1, e2); :};
 
 // While loop
 while_loop ::= WHILE condition:c block:b {: b.addFirst(c); RESULT = new InnerNode(NodeSymbol.WHILE, 0, b); :};
@@ -278,20 +276,19 @@ var_assignation  ::= ID:id ASSIGN expression:e
 // Return statement
 return_statement ::= RETURN expression:e 
                     {:
-                        InnerNode tmp = new InnerNode(NodeSymbol.RETURN, -4);
+                        InnerNode tmp = new InnerNode(NodeSymbol.RETURN, -404);
                         tmp.addChild(e);
                         RESULT = tmp;
                     :};
 
 // Expression
-expression ::= term ADD expression
-             | term SUB expression
+expression ::= term:t ADD expression:e {: RESULT = addExpression(NodeSymbol.ADD, t, e); :}
+             | term:t SUB expression:e {: RESULT = addExpression(NodeSymbol.SUB, t, e); :}
              | term:t {: RESULT = t; :};
-term       ::= factor MUL term
-             | factor DIV term
-             | factor MOD term
+term       ::= factor:f MUL term:t {: RESULT = addExpression(NodeSymbol.MUL, f, t); :}
+             | factor:f DIV term:t {: RESULT = addExpression(NodeSymbol.DIV, f, t); :}
              | factor:f {: RESULT = f; :};
-factor     ::= OPEN_P expression CLOSE_P
+factor     ::= OPEN_P expression:e CLOSE_P {: RESULT = e; :}
              | func_call:f {: RESULT = f; :}
-             | VALUE:v {: RESULT = new LeafNode(NodeSymbol.CONST, -2, v.toString()); :}
+             | VALUE:v {: RESULT = new LeafNode(NodeSymbol.CONST, -404, v.toString()); :}
              | ID:id {: RESULT = new LeafNode(NodeSymbol.VARIABLE, table.getClosestVariableKey(id.toString(), context)); :};
