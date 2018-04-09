@@ -1,0 +1,8 @@
+// 2. Programme qui utilise uniquement des variables globales
+int a;
+int b;
+
+function main(): void {
+    a = 0;
+    b = 0;
+}

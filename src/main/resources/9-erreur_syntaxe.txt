@@ -1,0 +1,4 @@
+// 9. Programme qui contient une erreur syntaxique
+function main(): void {
+    int a   // Point-virgule manquant
+}

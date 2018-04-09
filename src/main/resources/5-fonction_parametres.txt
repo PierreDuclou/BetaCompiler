@@ -1,0 +1,4 @@
+// 5. Programme qui contient une fonction avec des paramètres
+function add(int a, int b): int {
+    return a + b;
+}

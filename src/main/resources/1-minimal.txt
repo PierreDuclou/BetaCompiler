@@ -1,0 +1,2 @@
+// 1. Le plus petit programme
+int a;

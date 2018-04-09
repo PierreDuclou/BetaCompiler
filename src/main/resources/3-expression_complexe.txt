@@ -1,0 +1,10 @@
+// 3. Programme qui contient une expression complexe
+int a;
+int b;
+int c;
+
+function main(): void {
+    a = 4;
+    b = a * 2;
+    c = b + c - (12 / 6);
+}

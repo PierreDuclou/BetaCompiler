@@ -47,11 +47,12 @@ public class Expression extends Generable {
         if (sym.equals(NodeSymbol.DIV)) ret += "DIV(R1, R2, R3)\nPUSH(R3)\n";
 
         // Logic operators
-        if (sym.equals(NodeSymbol.LT)) ret += "CMPLT(R1, R2, R0)\nPUSH(R0)\n";
-        if (sym.equals(NodeSymbol.LE)) ret += "CMPLE(R1, R2, R0)\nPUSH(R0)\n";
-        if (sym.equals(NodeSymbol.EQ)) ret += "CMPEQ(R1, R2, R0)\nPUSH(R0)\n";
-        if (sym.equals(NodeSymbol.GE)) ret += "CMPLE(R2, R1, R0)\nPUSH(R0)\n";
-        if (sym.equals(NodeSymbol.GT)) ret += "CMPLT(R2, R1, R0)\nPUSH(R0)\n";
+        if (sym.equals(NodeSymbol.LT))   ret += "CMPLT(R1, R2, R0)\nPUSH(R0)\n";
+        if (sym.equals(NodeSymbol.LE))   ret += "CMPLE(R1, R2, R0)\nPUSH(R0)\n";
+        if (sym.equals(NodeSymbol.EQ))   ret += "CMPEQ(R1, R2, R0)\nPUSH(R0)\n";
+        if (sym.equals(NodeSymbol.GE))   ret += "CMPLE(R2, R1, R0)\nPUSH(R0)\n";
+        if (sym.equals(NodeSymbol.GT))   ret += "CMPLT(R2, R1, R0)\nPUSH(R0)\n";
+        if (sym.equals(NodeSymbol.DIFF)) ret += "CMPEQ(R1, R2, R0)\nXORC(R0, 1, R0)\nPUSH(R0)\n";
 
         return ret;
     }
