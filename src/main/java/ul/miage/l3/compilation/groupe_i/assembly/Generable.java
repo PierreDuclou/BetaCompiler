@@ -5,7 +5,7 @@ import ul.miage.l3.compilation.groupe_i.ast.Node;
 import ul.miage.l3.compilation.groupe_i.ast.NodeSymbol;
 
 /**
- * Represents a function in symbols table
+ * Abstract generable. A generable is
  *
  * @author Jeremy Thomas
  * @author Ouafa Bourekhsas

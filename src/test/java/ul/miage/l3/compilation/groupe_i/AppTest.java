@@ -5,11 +5,17 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Unit test for simple App.
+ * Represents a function in symbols table
+ *
+ * @author Jeremy Thomas
+ * @author Ouafa Bourekhsas
+ * @author Salme Ould Ahmed
+ * @author Theo Cominolo
+ * @author Pierre Duclou
+ *
+ * @version SNAPSHOT-1.0
  */
-public class AppTest 
-    extends TestCase
-{
+public class AppTest extends TestCase {
     /**
      * Create the test case
      *

@@ -2,7 +2,7 @@
 int a;
 int b;
 
-function main(): void {
-    a = 0;
-    b = 0;
+main() -> void {
+    a = 10;
+    b = 11;
 }

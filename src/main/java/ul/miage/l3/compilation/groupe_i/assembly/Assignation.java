@@ -5,7 +5,7 @@ import ul.miage.l3.compilation.groupe_i.ast.Node;
 import ul.miage.l3.compilation.groupe_i.symbols.*;
 
 /**
- * Represents a function in symbols table
+ * Assignation generable
  *
  * @author Jeremy Thomas
  * @author Ouafa Bourekhsas

@@ -3,7 +3,7 @@ package ul.miage.l3.compilation.groupe_i.assembly;
 import ul.miage.l3.compilation.groupe_i.ast.AbstractSyntaxTree;
 
 /**
- * Represents a function in symbols table
+ * Assembly generator
  *
  * @author Jeremy Thomas
  * @author Ouafa Bourekhsas
@@ -14,9 +14,14 @@ import ul.miage.l3.compilation.groupe_i.ast.AbstractSyntaxTree;
  * @version SNAPSHOT-1.0
  */
 public class BetaGenerator {
-    public static String generateAssembly(String output) {
-        Program p = new Program(AbstractSyntaxTree.getInstance().getRoot());
 
-        return p .generate();
+    /**
+     * Generates and returns assembly code
+     *
+     * @return asm code
+     */
+    public static String generateAssembly() {
+        Program p = new Program(AbstractSyntaxTree.getInstance().getRoot());
+        return p.generate();
     }
 }

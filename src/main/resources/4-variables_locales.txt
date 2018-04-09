@@ -1,15 +1,20 @@
 // 4. Programme qui contient deux fonctions avec chacune des variables locales, au moins une variable de chaque fonction
 //    utilise le même identificateur
-function first(): int {
+first() -> int {
     int toto = 0;
     int tata = 4;
 
     return toto + tata;
 }
 
-function second(): int {
+second() -> int {
     int toto = 2;
     int titi = 12;
 
     return toto * titi;
+}
+
+main() -> int {
+    int x = first();
+    int y = second();
 }

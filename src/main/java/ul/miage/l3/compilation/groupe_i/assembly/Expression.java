@@ -7,7 +7,7 @@ import ul.miage.l3.compilation.groupe_i.ast.NodeSymbol;
 import ul.miage.l3.compilation.groupe_i.symbols.*;
 
 /**
- * Represents a function in symbols table
+ * Expression generable
  *
  * @author Jeremy Thomas
  * @author Ouafa Bourekhsas

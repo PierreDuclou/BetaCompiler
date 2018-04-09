@@ -24,6 +24,7 @@
           <target>1.6</target>
         </configuration>
       </plugin>
+
       <!-- Assembly plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -33,23 +34,6 @@
           <descriptorRefs>
             <descriptorRef>project</descriptorRef>
           </descriptorRefs>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <!-- Utiliser le plugin assembler -->
-        <!-- mvn package appassembler:assemble -->
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>appassembler-maven-plugin</artifactId>
-        <version>1.10</version>
-        <configuration>
-          <assembleDirectory>${project.basedir}/scripts</assembleDirectory>
-          <programs>
-            <program>
-              <mainClass>${project.groupId}.${project.groupId}}.Main</mainClass>
-              <id>app</id>
-            </program>
-          </programs>
         </configuration>
       </plugin>
 
@@ -92,12 +76,29 @@
           </execution>
         </executions>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
+        </configuration>
+      </plugin>
+
+      <!-- AppAssembler plugin -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>appassembler-maven-plugin</artifactId>
+        <version>1.10</version>
+        <configuration>
+          <assembleDirectory>${project.build.directory}/scripts</assembleDirectory>
+          <programs>
+            <program>
+              <mainClass>${project.groupId}.App</mainClass>
+              <id>app</id>
+            </program>
+          </programs>
         </configuration>
       </plugin>
     </plugins>

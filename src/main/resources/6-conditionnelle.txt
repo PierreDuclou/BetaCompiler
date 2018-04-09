@@ -1,8 +1,13 @@
 // 6. Programme qui contient une conditionnelle
-function greater(int a, int b): int {
+greater(int a, int b) -> int {
     if (a > b) {
         return a;
     }
 
     return b;
+}
+
+main() -> void {
+    int x = greater(5, 15);
+    write(x);
 }

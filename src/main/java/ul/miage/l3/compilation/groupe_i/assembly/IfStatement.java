@@ -60,7 +60,7 @@ public class IfStatement extends Generable {
         return "\nif_" + counter + ":\n" +
                 GenerableFactory.getGenerable(children.poll()).generate() +
                 "POP(R0)\nBF(R0, else_" + counter + ")\n" +
-                generateNextBlock("\n| then:") +
+                generateNextBlock("\n| then:\n") +
                 "BR(endif_" + counter + ")\n" +
                 "\nelse_" + counter + ":\n" +
                 generateNextBlock("") + "endif_" + counter++ + ":\n";

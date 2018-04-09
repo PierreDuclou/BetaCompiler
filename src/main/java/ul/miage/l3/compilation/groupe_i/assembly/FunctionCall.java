@@ -6,7 +6,7 @@ import ul.miage.l3.compilation.groupe_i.symbols.Function;
 import ul.miage.l3.compilation.groupe_i.symbols.SymbolsTable;
 
 /**
- * Represents a function in symbols table
+ * Function call generable
  *
  * @author Jeremy Thomas
  * @author Ouafa Bourekhsas
