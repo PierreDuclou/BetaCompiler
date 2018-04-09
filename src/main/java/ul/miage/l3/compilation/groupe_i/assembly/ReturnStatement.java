@@ -6,6 +6,17 @@ import ul.miage.l3.compilation.groupe_i.ast.NodeSymbol;
 import ul.miage.l3.compilation.groupe_i.symbols.Function;
 import ul.miage.l3.compilation.groupe_i.symbols.SymbolsTable;
 
+/**
+ * Represents a function in symbols table
+ *
+ * @author Jeremy Thomas
+ * @author Ouafa Bourekhsas
+ * @author Salme Ould Ahmed
+ * @author Theo Cominolo
+ * @author Pierre Duclou
+ *
+ * @version SNAPSHOT-1.0
+ */
 public class ReturnStatement extends Generable {
     /**
      * Constructor

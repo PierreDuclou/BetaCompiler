@@ -1,7 +1,5 @@
 package ul.miage.l3.compilation.groupe_i.ast;
 
-import java.util.Iterator;
-
 /**
  * Represents an abstract syntax tree
  *

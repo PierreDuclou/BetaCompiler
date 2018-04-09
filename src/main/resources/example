@@ -1,5 +1,5 @@
 
-f(int a, int n) -> int {
+f(int n) -> int {
     while (a < n) {
         a = a + 1;
     }

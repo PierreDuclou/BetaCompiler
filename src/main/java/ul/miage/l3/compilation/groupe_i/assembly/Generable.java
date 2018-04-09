@@ -4,6 +4,17 @@ import ul.miage.l3.compilation.groupe_i.ast.InnerNode;
 import ul.miage.l3.compilation.groupe_i.ast.Node;
 import ul.miage.l3.compilation.groupe_i.ast.NodeSymbol;
 
+/**
+ * Represents a function in symbols table
+ *
+ * @author Jeremy Thomas
+ * @author Ouafa Bourekhsas
+ * @author Salme Ould Ahmed
+ * @author Theo Cominolo
+ * @author Pierre Duclou
+ *
+ * @version SNAPSHOT-1.0
+ */
 abstract class Generable {
     /**
      * The corresponding AST node

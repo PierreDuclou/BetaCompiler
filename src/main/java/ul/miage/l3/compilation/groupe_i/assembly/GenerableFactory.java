@@ -2,6 +2,17 @@ package ul.miage.l3.compilation.groupe_i.assembly;
 
 import ul.miage.l3.compilation.groupe_i.ast.Node;
 
+/**
+ * Represents a function in symbols table
+ *
+ * @author Jeremy Thomas
+ * @author Ouafa Bourekhsas
+ * @author Salme Ould Ahmed
+ * @author Theo Cominolo
+ * @author Pierre Duclou
+ *
+ * @version SNAPSHOT-1.0
+ */
 public class GenerableFactory {
     /**
      * Create and returns an instance of Generable depending on the symbol of the given node
