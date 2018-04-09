@@ -562,7 +562,7 @@ class CUP$ParserCup$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-1)).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-1)).right;
 		LinkedList<Node> a = (LinkedList<Node>)((java_cup.runtime.Symbol) CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-1)).value;
-		 RESULT = new InnerNode(NodeSymbol.CALL, -999, a); 
+		 RESULT = new InnerNode(NodeSymbol.CALL, table.getFunctionContext(id.toString()), a); 
               CUP$ParserCup$result = parser.getSymbolFactory().newSymbol("func_call",5, ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-3)), ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), RESULT);
             }
           return CUP$ParserCup$result;

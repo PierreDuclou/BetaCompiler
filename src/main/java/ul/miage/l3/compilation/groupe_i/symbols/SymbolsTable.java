@@ -71,6 +71,24 @@ public class SymbolsTable implements Iterable<Integer> {
     }
 
     /**
+     * Resolves and returns a function key in the symbols table
+     *
+     * @param functionName function name
+     * @return function key or null if it does not exist
+     */
+    public Integer getFunctionContext(String functionName) {
+        for (int i: symbols.keySet()) {
+            Symbol symbol = symbols.get(i);
+            if (symbol.getId().equals(functionName) && symbol instanceof Function) {
+                return i;
+            }
+        }
+
+        return null;
+    }
+    
+
+    /**
      * Returns the closest variable key in the table using the given id and context
      *
      * @param id id of the variable

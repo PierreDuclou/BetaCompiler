@@ -211,7 +211,7 @@ func_type       ::= INT:i {: RESULT = i; :} | VOID:v {: RESULT = v; :};
 parameters      ::= parameters COMMA var_declaration
                   | var_declaration
                   | ;
-func_call       ::= ID:id OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.CALL, -999, a); :}
+func_call       ::= ID:id OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.CALL, table.getFunctionContext(id.toString()), a); :}
                   | READ OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.READ, -999, a); :}
                   | WRITE OPEN_P arguments:a CLOSE_P {: RESULT = new InnerNode(NodeSymbol.WRITE, -999, a); :};
 

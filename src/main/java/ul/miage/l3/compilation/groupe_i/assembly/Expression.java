@@ -56,18 +56,20 @@ public class Expression extends Generable {
 
             case VARIABLE:
                 ret += "LD(" + ((LeafNode) node).getValue() + ", R0)\nPUSH(R0)\n";
+                break;
 
             case CALL:
-                ret += new ReturnStatement(node).generate();
+                ret += new FunctionCall(node).generate();
                 break;
 
             case WRITE:
             case READ:
                 ret += new Intio(node).generate();
+                break;
 
             default:
-                System.out.println(node.getNodeSymbol());
                 ret += generateExpression();
+                break;
         }
 
         return ret;

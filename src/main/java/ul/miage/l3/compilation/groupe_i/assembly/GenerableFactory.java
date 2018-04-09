@@ -1,6 +1,5 @@
 package ul.miage.l3.compilation.groupe_i.assembly;
 
-import ul.miage.l3.compilation.groupe_i.ast.InnerNode;
 import ul.miage.l3.compilation.groupe_i.ast.Node;
 
 public class GenerableFactory {
