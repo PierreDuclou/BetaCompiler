@@ -59,12 +59,10 @@ public class Expression extends Generable {
                     SymbolsTable.getInstance().get(node.getSymbolsTableKey()).getId() +
                     ", R0)\nPUSH(R0)";
         } else if (sym instanceof LocalVariable) {
-            ret += "GETFRAME(" + (((LocalVariable) sym).getRank() + 2) * 4 + ", R0)\n" +
+            ret += "GETFRAME(" + ((LocalVariable) sym).getRank() * 4 + ", R0)\n" +
                     "PUSH(R0)";
         } else {
-            Parameter p = ((Parameter) sym);
-            Function f = (Function) SymbolsTable.getInstance().get(p.getContext());
-            ret += "GETFRAME(" + (f.getNumberOfParameters()+2) * (-4) + ", R0)\n" +
+            ret += "GETFRAME(" + (((Parameter) sym).getRank()+3) * 4 + ", R0)\n" +
                     "PUSH(R0)";
         }
 

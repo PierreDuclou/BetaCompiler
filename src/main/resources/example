@@ -1,8 +1,22 @@
-int a;
+f(int n) -> int {
+    return n;
+}
 
 main() -> void {
-    int b = 0;
-    while (b < 10) {
-        b = b + 1;
+    /*
+    int a;
+    int b;
+
+    while (a < 2) {
+        a = 10;
+        b = 11;
     }
+    int a = 10;
+    int b = 11;
+    int c = 12;
+    int d = 13;
+    */
+
+    int a = f(10);
+    int b = f(11);
 }

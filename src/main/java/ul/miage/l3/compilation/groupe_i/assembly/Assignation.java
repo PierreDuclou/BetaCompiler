@@ -28,9 +28,9 @@ public class Assignation extends Generable {
         if (sym instanceof GlobalVariable)
             ret += "ST(R0, " + SymbolsTable.getInstance().get(left.getSymbolsTableKey()).getId() + ")\n";
         if (sym instanceof Parameter)
-            ret += "PUTFRAME(R0, " + -(2 + ((Parameter) sym).getRank()) * 4 + ")\n";
+            ret += "PUTFRAME(R0, " + (3+((Parameter) sym).getRank()) * 4 + ")\n";
         if (sym instanceof LocalVariable)
-            ret += "PUTFRAME(R0, " + (2 + ((LocalVariable) sym).getRank()) * 4 + ")\n";
+            ret += "PUTFRAME(R0, " + ((LocalVariable) sym).getRank() * 4 + ")\n";
 
         return ret;
     }

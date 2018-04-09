@@ -1,5 +1,6 @@
 package ul.miage.l3.compilation.groupe_i.assembly;
 
+import ul.miage.l3.compilation.groupe_i.ast.InnerNode;
 import ul.miage.l3.compilation.groupe_i.ast.Node;
 import ul.miage.l3.compilation.groupe_i.ast.NodeSymbol;
 import ul.miage.l3.compilation.groupe_i.symbols.Function;
@@ -21,8 +22,9 @@ public class ReturnStatement extends Generable {
                 .getInstance()
                 .get(getClosestAncestor(node, NodeSymbol.FUNCTION).getSymbolsTableKey());
 
-        String ret = "POP(R0)\n" +
-                "PUTFRAME(R0, " + -(2 + func.getNumberOfParameters()) * 4 + ")\n" +
+        String ret = GenerableFactory.getGenerable(((InnerNode) node).getChildren().getFirst()).generate() +
+                "POP(R0)\n" +
+                "PUTFRAME(R0, " + (3 + func.getNumberOfParameters()) * 4 + ")\n" +
                 "BR(return_" + func.getId() + ")\n";
         return ret;
     }

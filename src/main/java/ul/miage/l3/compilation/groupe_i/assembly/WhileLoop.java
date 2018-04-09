@@ -19,10 +19,10 @@ public class WhileLoop extends Generable {
 
     @Override
     public String generate() {
-        LinkedList<Node> children = ((InnerNode) node).getChildren();
+        LinkedList<Node> children = (LinkedList)((InnerNode) node).getChildren().clone();
 
-        String ret = "\nwhile_" + counter + ":\n" +
-                GenerableFactory.getGenerable(children.getFirst()).generate() +
+        String ret = "\nwhile_" + counter + ":\n\n" +
+                GenerableFactory.getGenerable(children.pollFirst()).generate() +
                 "POP(R0)\n" +
                 "BF(R0, endwhile_" + counter + ")\n";
 

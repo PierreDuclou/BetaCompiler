@@ -41,7 +41,7 @@ public class App
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (UndeclaredSymbolException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
