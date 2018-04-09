@@ -20,7 +20,7 @@ public class BetaGenerator {
      *
      * @return asm code
      */
-    public static String generateAssembly() {
+    public static String generateAssembly() throws Exception {
         Program p = new Program(AbstractSyntaxTree.getInstance().getRoot());
         return p.generate();
     }

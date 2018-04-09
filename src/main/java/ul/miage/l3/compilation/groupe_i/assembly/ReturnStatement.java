@@ -18,6 +18,8 @@ import ul.miage.l3.compilation.groupe_i.symbols.SymbolsTable;
  * @version SNAPSHOT-1.0
  */
 public class ReturnStatement extends Generable {
+    private Function func;
+
     /**
      * Constructor
      *
@@ -25,13 +27,15 @@ public class ReturnStatement extends Generable {
      */
     public ReturnStatement(Node node) {
         super(node);
+        func = (Function) SymbolsTable
+                .getInstance()
+                .get(node.getSymbolsTableKey());
     }
 
     @Override
-    public String generate() {
-        Function func = (Function) SymbolsTable
-                .getInstance()
-                .get(getClosestAncestor(node, NodeSymbol.FUNCTION).getSymbolsTableKey());
+    public String generate() throws Exception {
+        if (func == null || !func.getType().equals("int"))
+            throw new Exception("Impossible d'utiliser le symbole return dans ce contexte.");
 
         String ret = GenerableFactory.getGenerable(((InnerNode) node).getChildren().getFirst()).generate() +
                 "POP(R0)\n" +

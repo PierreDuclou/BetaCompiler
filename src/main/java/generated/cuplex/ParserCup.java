@@ -276,7 +276,7 @@ class CUP$ParserCup$actions {
      * @param value value of the variable
      * @return key of the added variable in the symbols table
      */
-    private int addVariable(String id, String type, int value) {
+    private int addVariable(String id, String type, int value) throws Exception {
         int key;
 
         if (context == null) {
@@ -298,7 +298,7 @@ class CUP$ParserCup$actions {
      * @param type type of the variable
      * @return key of the added parameter in the symbols table
      */
-    private int addParameter(String id, String type) {
+    private int addParameter(String id, String type) throws Exception {
         Function f = (Function) table.get(context);
         int rank = f.getNumberOfParameters();
         int key = table.add(new Parameter(id, type, rank, context));
@@ -1022,7 +1022,7 @@ class CUP$ParserCup$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()).right;
 		Node e = (Node)((java_cup.runtime.Symbol) CUP$ParserCup$stack.peek()).value;
 		
-                        InnerNode tmp = new InnerNode(NodeSymbol.RETURN, -999);
+                        InnerNode tmp = new InnerNode(NodeSymbol.RETURN, context);
                         tmp.addChild(e);
                         RESULT = tmp;
                     

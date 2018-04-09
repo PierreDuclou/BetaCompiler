@@ -22,20 +22,6 @@ abstract class Generable {
     protected Node node;
 
     /**
-     * Retrieves and returns the closest ancestor matching the given symbol
-     *
-     * @param node starting node
-     * @param sym wanted symbol
-     * @return matching ancestor
-     */
-    protected InnerNode getClosestAncestor(Node node, NodeSymbol sym) {
-        if (node.getParent().getNodeSymbol().equals(sym))
-            return node.getParent();
-
-        return getClosestAncestor(node.getParent(), sym);
-    }
-
-    /**
      * Constructor
      *
      * @param node node
@@ -49,5 +35,5 @@ abstract class Generable {
      *
      * @return assembly code
      */
-    public abstract String generate();
+    public abstract String generate() throws Exception;
 }

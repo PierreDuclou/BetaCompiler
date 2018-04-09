@@ -27,7 +27,7 @@ public class Program extends Generable {
     }
 
     @Override
-    public String generate() {
+    public String generate() throws Exception {
         String ret =
                 ".include beta.uasm\n" +
                 ".include intio.uasm\n" +

@@ -32,7 +32,7 @@ public class Expression extends Generable {
      *
      * @return assembly code for a sub-expression
      */
-    private String generateExpression() {
+    private String generateExpression() throws Exception {
         String ret = new Expression(((InnerNode) node).getChildren().getFirst()).generate() +
                 new Expression(((InnerNode) node).getChildren().getLast()).generate() +
                 "POP(R2)\n" +
@@ -82,7 +82,7 @@ public class Expression extends Generable {
     }
 
     @Override
-    public String generate() {
+    public String generate() throws Exception {
         String ret = "";
 
         switch (node.getNodeSymbol()) {

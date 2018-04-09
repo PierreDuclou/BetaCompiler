@@ -1,0 +1,7 @@
+procedure() -> void {
+    write(2);
+}
+
+main() -> void {
+    int a = procedure();
+}

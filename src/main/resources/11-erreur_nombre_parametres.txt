@@ -1,0 +1,9 @@
+// 11. Erreur dans le nombre de paramètres
+
+add(int x, int y) -> int {
+    return x + y;
+}
+
+main() -> void {
+    int a = add(1, 2, 3);
+}

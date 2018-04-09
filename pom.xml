@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>ul.miage.l3.compilation.groupe_i</groupId>
@@ -31,8 +31,13 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.1.0</version>
         <configuration>
+          <archive>
+            <manifest>
+              <mainClass>ul.miage.l3.compilation.groupe_i.App</mainClass>
+            </manifest>
+          </archive>
           <descriptorRefs>
-            <descriptorRef>project</descriptorRef>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
         </configuration>
       </plugin>
@@ -81,8 +86,22 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
+
           <source>1.8</source>
           <target>1.8</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <mainClass>ul.miage.l3.compilation.groupe_i.App</mainClass>
+            </manifest>
+          </archive>
         </configuration>
       </plugin>
 
@@ -92,10 +111,11 @@
         <artifactId>appassembler-maven-plugin</artifactId>
         <version>1.10</version>
         <configuration>
+
           <assembleDirectory>${project.build.directory}/scripts</assembleDirectory>
           <programs>
             <program>
-              <mainClass>${project.groupId}.App</mainClass>
+              <mainClass>ul.miage.l3.compilation.groupe_i.App</mainClass>
               <id>app</id>
             </program>
           </programs>

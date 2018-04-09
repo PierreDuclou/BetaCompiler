@@ -43,7 +43,7 @@ public class IfStatement extends Generable {
      * @param header
      * @return
      */
-    private String generateNextBlock(String header) {
+    private String generateNextBlock(String header) throws Exception {
         String ret = header;
 
         if (children.size() > 0) {
@@ -56,7 +56,7 @@ public class IfStatement extends Generable {
     }
 
     @Override
-    public String generate() {
+    public String generate() throws Exception {
         return "\nif_" + counter + ":\n" +
                 GenerableFactory.getGenerable(children.poll()).generate() +
                 "POP(R0)\nBF(R0, else_" + counter + ")\n" +

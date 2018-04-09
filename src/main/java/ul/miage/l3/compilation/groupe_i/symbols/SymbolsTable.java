@@ -41,6 +41,39 @@ public class SymbolsTable implements Iterable<Integer> {
     }
 
     /**
+     *
+     * @param symbol
+     * @return
+     */
+    public boolean contains(Symbol symbol) {
+        for (int i: symbols.keySet()) {
+            Symbol tmp = symbols.get(i);
+
+            if (tmp.id.equals(symbol.id)) {
+
+                // Local variables
+                if (
+                        symbol instanceof ContextedSymbol &&
+                        tmp instanceof ContextedSymbol &&
+                        symbol.getClass().equals(tmp.getClass())
+                ) {
+                    return ((ContextedSymbol) symbol).context == ((ContextedSymbol) tmp).context;
+                }
+
+                // Functions
+                if (symbol instanceof Function && tmp instanceof Function)
+                    return true;
+
+                if (symbol instanceof GlobalVariable && tmp instanceof GlobalVariable) {
+                    return symbol.getId().equals(tmp.getId());
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Return the current INSTANCE
      *
      * @return INSTANCE
@@ -55,9 +88,13 @@ public class SymbolsTable implements Iterable<Integer> {
      * @param symbol symbol to add
      * @return last key added (current context)
      */
-    public int add(Symbol symbol) {
-        symbols.put(key, symbol);
-        return key++;
+    public int add(Symbol symbol) throws Exception {
+        if (!contains(symbol)) {
+            symbols.put(key, symbol);
+            return key++;
+        }
+
+        throw new Exception("Le symbole : \"" + symbol.getId() + "\" a déjà été déclaré.");
     }
 
     /**
@@ -86,7 +123,6 @@ public class SymbolsTable implements Iterable<Integer> {
 
         return null;
     }
-    
 
     /**
      * Returns the closest variable key in the table using the given id and context
@@ -121,7 +157,7 @@ public class SymbolsTable implements Iterable<Integer> {
         }
 
         if (ret < 0) {
-            throw new UndeclaredSymbolException("Cannot resolve symbol : \"" + id + '\"');
+            throw new UndeclaredSymbolException("Symbole : \"" + id + "\" inconnu.");
         }
 
         return ret;

@@ -1,0 +1,34 @@
+int b = 123;
+
+factorielle(int n) -> int {
+    if (n <= 1) {
+        return 1;
+    }
+
+    return n;
+}
+
+someFunc(int x, int y, int z) -> int {
+    return x + y + z;
+}
+
+main() -> void {
+    int a;
+    b = 11 + (12 * 5);
+
+    if (b > 0) {
+        b = 0;
+    }
+
+    while (b < 10) {
+        b = 123;
+    }
+
+    a = factorielle(b);
+    int c = 45;
+    int d = c;
+    a = d;
+    write(a);
+    int k = read();
+    a = someFunc(a, b, c);
+}

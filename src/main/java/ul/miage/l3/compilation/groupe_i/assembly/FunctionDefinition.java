@@ -27,7 +27,7 @@ public class FunctionDefinition extends Generable {
     }
 
     @Override
-    public String generate() {
+    public String generate() throws Exception {
         Function sym = (Function) SymbolsTable.getInstance().get(node.getSymbolsTableKey());
 
         String ret = '\n' + sym.getId() + ":\n" +

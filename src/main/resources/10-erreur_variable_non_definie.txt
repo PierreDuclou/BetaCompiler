@@ -1,0 +1,5 @@
+// 10. Programme qui contient une sémantique
+
+main() -> void {
+    undefined = 123;        // erreur de variable non définie
+}

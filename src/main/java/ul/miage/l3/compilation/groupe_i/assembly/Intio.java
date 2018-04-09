@@ -26,7 +26,7 @@ public class Intio extends Generable {
     }
 
     @Override
-    public String generate() {
+    public String generate() throws Exception {
         String ret = null;
         NodeSymbol sym = node.getNodeSymbol();
 

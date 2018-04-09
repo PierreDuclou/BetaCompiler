@@ -29,7 +29,7 @@ public class WhileLoop extends Generable {
     }
 
     @Override
-    public String generate() {
+    public String generate() throws Exception {
         LinkedList<Node> children = (LinkedList)((InnerNode) node).getChildren().clone();
 
         String ret = "\nwhile_" + counter + ":\n\n" +

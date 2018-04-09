@@ -50,7 +50,7 @@ action code {:
      * @param value value of the variable
      * @return key of the added variable in the symbols table
      */
-    private int addVariable(String id, String type, int value) {
+    private int addVariable(String id, String type, int value) throws Exception {
         int key;
 
         if (context == null) {
@@ -72,7 +72,7 @@ action code {:
      * @param type type of the variable
      * @return key of the added parameter in the symbols table
      */
-    private int addParameter(String id, String type) {
+    private int addParameter(String id, String type) throws Exception {
         Function f = (Function) table.get(context);
         int rank = f.getNumberOfParameters();
         int key = table.add(new Parameter(id, type, rank, context));
@@ -305,7 +305,7 @@ var_assignation  ::= ID:id ASSIGN expression:e
 // Return statement
 return_statement ::= RETURN expression:e 
                     {:
-                        InnerNode tmp = new InnerNode(NodeSymbol.RETURN, -999);
+                        InnerNode tmp = new InnerNode(NodeSymbol.RETURN, context);
                         tmp.addChild(e);
                         RESULT = tmp;
                     :};

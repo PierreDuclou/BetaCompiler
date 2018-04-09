@@ -26,7 +26,7 @@ public class Assignation extends Generable {
     }
 
     @Override
-    public String generate() {
+    public String generate() throws Exception {
         Node left = ((InnerNode) node).getChildren().getFirst();
         Node right = ((InnerNode) node).getChildren().getLast();
 
