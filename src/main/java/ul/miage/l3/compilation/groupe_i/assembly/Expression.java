@@ -4,6 +4,7 @@ import ul.miage.l3.compilation.groupe_i.ast.InnerNode;
 import ul.miage.l3.compilation.groupe_i.ast.LeafNode;
 import ul.miage.l3.compilation.groupe_i.ast.Node;
 import ul.miage.l3.compilation.groupe_i.ast.NodeSymbol;
+import ul.miage.l3.compilation.groupe_i.symbols.*;
 
 public class Expression extends Generable {
     /**
@@ -24,7 +25,7 @@ public class Expression extends Generable {
         String ret = new Expression(((InnerNode) node).getChildren().getFirst()).generate() +
                 new Expression(((InnerNode) node).getChildren().getLast()).generate() +
                 "POP(R2)\n" +
-                "POP(R1)";
+                "POP(R1)\n";
 
         NodeSymbol sym = node.getNodeSymbol();
 
@@ -44,6 +45,32 @@ public class Expression extends Generable {
         return ret;
     }
 
+    /**
+     * Resolves the way to get the variable value depending on its symbol (global, local, parameter)
+     *
+     * @return asm instruction to get the variable value
+     */
+    private String resolveVariable() {
+        Symbol sym = SymbolsTable.getInstance().get(node.getSymbolsTableKey());
+        String ret = "";
+
+        if (sym instanceof GlobalVariable) {
+            ret += "LD(" +
+                    SymbolsTable.getInstance().get(node.getSymbolsTableKey()).getId() +
+                    ", R0)\nPUSH(R0)";
+        } else if (sym instanceof LocalVariable) {
+            ret += "GETFRAME(" + (((LocalVariable) sym).getRank() + 2) * 4 + ", R0)\n" +
+                    "PUSH(R0)";
+        } else {
+            Parameter p = ((Parameter) sym);
+            Function f = (Function) SymbolsTable.getInstance().get(p.getContext());
+            ret += "GETFRAME(" + (f.getNumberOfParameters()+2) * (-4) + ", R0)\n" +
+                    "PUSH(R0)";
+        }
+
+        return ret;
+    }
+
     @Override
     public String generate() {
         String ret = "";
@@ -55,7 +82,7 @@ public class Expression extends Generable {
                 break;
 
             case VARIABLE:
-                ret += "LD(" + ((LeafNode) node).getValue() + ", R0)\nPUSH(R0)\n";
+                ret += resolveVariable() + '\n';
                 break;
 
             case CALL:

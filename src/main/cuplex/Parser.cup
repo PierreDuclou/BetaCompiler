@@ -191,8 +191,8 @@ entry ::= program:p
             tree.setRoot(root);
         :};
 
-program ::= program var_declaration SEMICOLON {: RESULT = new LinkedList(); :}
-          | program var_assignation SEMICOLON {: RESULT = new LinkedList(); :}
+program ::= program:p var_declaration SEMICOLON {: RESULT = p != null ? p : new LinkedList(); :}
+          | program:p var_assignation SEMICOLON {: RESULT = p != null ? p : new LinkedList(); :}
           | program:p func_definition:f {: p.add(f); RESULT = p; :}
           | {: RESULT = new LinkedList(); :};
           

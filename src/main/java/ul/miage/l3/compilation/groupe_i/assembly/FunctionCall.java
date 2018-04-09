@@ -20,9 +20,9 @@ public class FunctionCall extends Generable {
     public String generate() {
         Function func = (Function) SymbolsTable
                 .getInstance()
-                .get(getClosestAncestor(node, NodeSymbol.FUNCTION).getSymbolsTableKey());
+                .get(node.getSymbolsTableKey());
 
-        String ret = "\nALLOCATE(1)";
+        String ret = "\nALLOCATE(1)\n";
 
         for (Node child: ((InnerNode) node).getChildren()) {
             ret += GenerableFactory.getGenerable(child).generate();

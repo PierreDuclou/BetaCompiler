@@ -402,7 +402,10 @@ class CUP$ParserCup$actions {
           case 2: // program ::= program var_declaration SEMICOLON 
             {
               LinkedList<Node> RESULT =null;
-		 RESULT = new LinkedList(); 
+		int pleft = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).left;
+		int pright = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).right;
+		LinkedList<Node> p = (LinkedList<Node>)((java_cup.runtime.Symbol) CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).value;
+		 RESULT = p != null ? p : new LinkedList(); 
               CUP$ParserCup$result = parser.getSymbolFactory().newSymbol("program",1, ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)), ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), RESULT);
             }
           return CUP$ParserCup$result;
@@ -411,7 +414,10 @@ class CUP$ParserCup$actions {
           case 3: // program ::= program var_assignation SEMICOLON 
             {
               LinkedList<Node> RESULT =null;
-		 RESULT = new LinkedList(); 
+		int pleft = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).left;
+		int pright = ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).right;
+		LinkedList<Node> p = (LinkedList<Node>)((java_cup.runtime.Symbol) CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)).value;
+		 RESULT = p != null ? p : new LinkedList(); 
               CUP$ParserCup$result = parser.getSymbolFactory().newSymbol("program",1, ((java_cup.runtime.Symbol)CUP$ParserCup$stack.elementAt(CUP$ParserCup$top-2)), ((java_cup.runtime.Symbol)CUP$ParserCup$stack.peek()), RESULT);
             }
           return CUP$ParserCup$result;

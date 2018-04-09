@@ -2,7 +2,7 @@ package ul.miage.l3.compilation.groupe_i.assembly;
 
 import ul.miage.l3.compilation.groupe_i.ast.InnerNode;
 import ul.miage.l3.compilation.groupe_i.ast.Node;
-import ul.miage.l3.compilation.groupe_i.symbols.SymbolsTable;
+import ul.miage.l3.compilation.groupe_i.symbols.*;
 
 public class Assignation extends Generable {
     /**
@@ -16,11 +16,22 @@ public class Assignation extends Generable {
 
     @Override
     public String generate() {
-        Node fg = ((InnerNode) node).getChildren().getFirst();
-        Node fd = ((InnerNode) node).getChildren().getLast();
+        Node left = ((InnerNode) node).getChildren().getFirst();
+        Node right = ((InnerNode) node).getChildren().getLast();
 
-        return GenerableFactory.getGenerable(fd).generate() +
-                "POP(R0)\n" +
-                "ST(R0, " + SymbolsTable.getInstance().get(fg.getSymbolsTableKey()).getId() + ")\n";
+        // Symbol of the assigned variable
+        Symbol sym = SymbolsTable.getInstance().get(left.getSymbolsTableKey());
+
+        // Generating result of the right member (assigned value)
+        String ret = '\n' + GenerableFactory.getGenerable(right).generate() + "POP(R0)\n";
+
+        if (sym instanceof GlobalVariable)
+            ret += "ST(R0, " + SymbolsTable.getInstance().get(left.getSymbolsTableKey()).getId() + ")\n";
+        if (sym instanceof Parameter)
+            ret += "PUTFRAME(R0, " + -(2 + ((Parameter) sym).getRank()) * 4 + ")\n";
+        if (sym instanceof LocalVariable)
+            ret += "PUTFRAME(R0, " + (2 + ((LocalVariable) sym).getRank()) * 4 + ")\n";
+
+        return ret;
     }
 }
