@@ -38,12 +38,12 @@ public class Program extends Generable {
         }
 
         for (Node child: ((InnerNode) node).getChildren()) {
-            ret += GenerableFactory.getGenerable((InnerNode) child).generate();
+            ret += GenerableFactory.getGenerable(child).generate();
         }
 
         ret += "\nstart:\n" +
                (main ? "CALL(main)\n" : "") +
-               "HALT()\n" +
+               "HALT()\n\n" +
                "stack:";
         return ret;
     }

@@ -23,12 +23,13 @@ public class Assignation extends Generable {
         Symbol sym = SymbolsTable.getInstance().get(left.getSymbolsTableKey());
 
         // Generating result of the right member (assigned value)
-        String ret = '\n' + GenerableFactory.getGenerable(right).generate() + "POP(R0)\n";
+        String ret = "\n| Affectation de " + sym.getId() + ":\n" +
+                GenerableFactory.getGenerable(right).generate() + "POP(R0)\n";
 
         if (sym instanceof GlobalVariable)
-            ret += "ST(R0, " + SymbolsTable.getInstance().get(left.getSymbolsTableKey()).getId() + ")\n";
+            ret += "ST(R0, " + sym.getId() + ")\n";
         if (sym instanceof Parameter)
-            ret += "PUTFRAME(R0, " + (3+((Parameter) sym).getRank()) * 4 + ")\n";
+            ret += "PUTFRAME(R0, " + -(3+((Parameter) sym).getRank()) * 4 + ")\n";
         if (sym instanceof LocalVariable)
             ret += "PUTFRAME(R0, " + ((LocalVariable) sym).getRank() * 4 + ")\n";
 

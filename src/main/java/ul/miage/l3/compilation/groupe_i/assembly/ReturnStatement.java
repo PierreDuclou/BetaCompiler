@@ -24,7 +24,7 @@ public class ReturnStatement extends Generable {
 
         String ret = GenerableFactory.getGenerable(((InnerNode) node).getChildren().getFirst()).generate() +
                 "POP(R0)\n" +
-                "PUTFRAME(R0, " + (3 + func.getNumberOfParameters()) * 4 + ")\n" +
+                "PUTFRAME(R0, " + -(3 + func.getNumberOfParameters()) * 4 + ")\n" +
                 "BR(return_" + func.getId() + ")\n";
         return ret;
     }

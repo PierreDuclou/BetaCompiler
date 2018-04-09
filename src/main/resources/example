@@ -1,6 +1,12 @@
-f(int n) -> int {
-    return n;
+
+f(int a, int n) -> int {
+    while (a < n) {
+        a = a + 1;
+    }
+
+    return a;
 }
+
 
 main() -> void {
     /*
@@ -17,6 +23,5 @@ main() -> void {
     int d = 13;
     */
 
-    int a = f(10);
-    int b = f(11);
+    int a = f(1, 10);
 }

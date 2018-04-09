@@ -62,7 +62,7 @@ public class Expression extends Generable {
             ret += "GETFRAME(" + ((LocalVariable) sym).getRank() * 4 + ", R0)\n" +
                     "PUSH(R0)";
         } else {
-            ret += "GETFRAME(" + (((Parameter) sym).getRank()+3) * 4 + ", R0)\n" +
+            ret += "GETFRAME(" + -(((Parameter) sym).getRank()+3) * 4 + ", R0)\n" +
                     "PUSH(R0)";
         }
 

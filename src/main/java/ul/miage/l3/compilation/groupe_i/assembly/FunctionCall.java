@@ -29,7 +29,7 @@ public class FunctionCall extends Generable {
 
         ret += "CALL(" + func.getId() + ")\n" +
                "DEALLOCATE(" + func.getNumberOfParameters() + ")\n";
-
+// push(r0) ?
         return ret;
     }
 }
