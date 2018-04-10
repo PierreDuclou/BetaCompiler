@@ -40,8 +40,8 @@ public class IfStatement extends Generable {
     /**
      * Generate an inner block of instructions (then/else)
      *
-     * @param header
-     * @return
+     * @param header header to print before the block
+     * @return an inner block of instructions
      */
     private String generateNextBlock(String header) throws Exception {
         String ret = header;

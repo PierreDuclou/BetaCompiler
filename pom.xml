@@ -112,7 +112,7 @@
         <version>1.10</version>
         <configuration>
 
-          <assembleDirectory>${project.build.directory}/scripts</assembleDirectory>
+          <assembleDirectory>${project.basedir}/scripts</assembleDirectory>
           <programs>
             <program>
               <mainClass>ul.miage.l3.compilation.groupe_i.App</mainClass>

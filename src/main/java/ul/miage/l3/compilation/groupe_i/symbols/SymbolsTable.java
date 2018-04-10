@@ -41,9 +41,10 @@ public class SymbolsTable implements Iterable<Integer> {
     }
 
     /**
+     * Determines if the table contains a symbol particular
      *
-     * @param symbol
-     * @return
+     * @param symbol symbol to search
+     * @return true if the table contains the symbol, else false
      */
     public boolean contains(Symbol symbol) {
         for (int i: symbols.keySet()) {
