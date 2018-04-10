@@ -37,14 +37,15 @@ public class App
             System.out.println(Prettifier.prettify(SymbolsTable.getInstance().toString()));
             System.out.println(Prettifier.prettify(AbstractSyntaxTree.getInstance().toString()));
 
+            String asm = BetaGenerator.generateAssembly();
+            
             PrintWriter writer = new PrintWriter(args[1], "UTF-8");
-            writer.print(BetaGenerator.generateAssembly());
+            writer.print(asm);
             writer.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (Exception e) {
-            e.printStackTrace();
             System.out.println("Erreur: " + e.getMessage());
         }
 
